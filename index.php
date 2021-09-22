@@ -1,7 +1,7 @@
 <?php
-$is_auth = rand(0, 1);
+$isAuth = rand(0, 1);
 
-$user_name = 'Katia Sheleh';
+$userName = 'Katia Sheleh';
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -28,14 +28,14 @@ $user_name = 'Katia Sheleh';
 
         <nav class="user-menu">
 
-        <!-- show user info if $is_auth is true --> 
-        <?php if($is_auth) : ?>
+        <!-- show user info if $isAuth is true -->
+        <?php if($isAuth === 1) : ?>
             <div class="user-menu__logged">
-                <p><?= $user_name; ?></p>
+                <p><?= $userName; ?></p>
                 <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
                 <a class="user-menu__logout" href="#">Выход</a>
             </div>
-        <!-- show login menu if $is_auth is false -->  
+        <!-- show login menu if $isAuth is false -->
         <?php else: ?>
             <ul class="user-menu__list">
                 <li class="user-menu__item">
