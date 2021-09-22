@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Катерина Шелег](https://up.htmlacademy.ru/php/12/user/43436).
-* Наставник: [Олег Зенькович] (https://htmlacademy.ru/profile/id135328).
+* Наставник: Олег Зенькович.
 
 ---
 
