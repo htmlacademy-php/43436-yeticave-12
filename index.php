@@ -1,48 +1,65 @@
 <?php
-$isAuth = rand(0, 1);
+    $isAuth = rand(0, 1);
 
-$userName = 'Katia Sheleh';
+    $userName = 'Katia Sheleh';
 
-$categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
+    $categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 
-$lots = [
-    [
-        'name' => '2014 Rossignol District Snowboard',
-        'category' => 'Доски и лыжи',
-        'price' => '10999',
-        'imgUrl' => 'img/lot-1.jpg'
-    ],
-    [
-        'name' => 'DC Ply Mens 2016/2017 Snowboard',
-        'category' => 'Доски и лыжи',
-        'price' => '159999',
-        'imgUrl' => 'img/lot-2.jpg'
-    ],
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => 'Крепления',
-        'price' => '8000',
-        'imgUrl' => 'img/lot-3.jpg'
-    ],
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => 'Ботинки',
-        'price' => '10999',
-        'imgUrl' => 'img/lot-4.jpg'
-    ],
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category' => 'Одежда',
-        'price' => '7500',
-        'imgUrl' => 'img/lot-5.jpg'
-    ],
-    [
-        'name' => 'Маска Oakley Canopy',
-        'category' => 'Разное',
-        'price' => '5400',
-        'imgUrl' => 'img/lot-6.jpg'
-    ]
+    $lots = [
+        [
+            'name' => '2014 Rossignol District Snowboard',
+            'category' => 'Доски и лыжи',
+            'price' => '10999.456',
+            'imgUrl' => 'img/lot-1.jpg'
+        ],
+        [
+            'name' => 'DC Ply Mens 2016/2017 Snowboard',
+            'category' => 'Доски и лыжи',
+            'price' => '159999',
+            'imgUrl' => 'img/lot-2.jpg'
+        ],
+        [
+            'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
+            'category' => 'Крепления',
+            'price' => '8000',
+            'imgUrl' => 'img/lot-3.jpg'
+        ],
+        [
+            'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
+            'category' => 'Ботинки',
+            'price' => '10999',
+            'imgUrl' => 'img/lot-4.jpg'
+        ],
+        [
+            'name' => 'Куртка для сноуборда DC Mutiny Charocal',
+            'category' => 'Одежда',
+            'price' => '7500.6468',
+            'imgUrl' => 'img/lot-5.jpg'
+        ],
+        [
+            'name' => 'Маска Oakley Canopy',
+            'category' => 'Разное',
+            'price' => '5400.6547',
+            'imgUrl' => 'img/lot-6.jpg'
+        ]
     ];
+
+    function formatPrice($price) {
+        $output = $price;
+
+        // check if the argument has type number
+        if (is_numeric($price)) {
+
+            // round the number to a whole number
+            $output = ceil($price);
+
+            // add white space as a thousand separator for values greater that 1000
+            if($price > 1000) {
+                $output = number_format($output, 0, '', ' ');
+            }
+        }
+        return $output . " &euro;";
+    }
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -127,7 +144,7 @@ $lots = [
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost">
-                                <?= $lotValue['price'] ?><b class="rub">р</b>
+                                <?= formatPrice($lotValue['price']) ?>
                             </span>
                         </div>
                         <div class="lot__timer timer">
