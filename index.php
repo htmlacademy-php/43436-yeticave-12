@@ -39,26 +39,27 @@
         [
             'name' => 'Маска Oakley Canopy',
             'category' => 'Разное',
-            'price' => '5400.6547',
+            'price' => '999.99',
             'imgUrl' => 'img/lot-6.jpg'
         ]
     ];
 
     function formatPrice($price) {
-        $output = $price;
+        $currency = ' &euro;';
 
-        // check if the argument has type number
-        if (is_numeric($price)) {
-
-            // round the number to a whole number
-            $output = ceil($price);
-
-            // add white space as a thousand separator for values greater that 1000
-            if($price > 1000) {
-                $output = number_format($output, 0, '', ' ');
-            }
+        // show an input value if $price isn't a numeric type
+        if (!is_numeric($price)) {
+            return $price . $currency;
         }
-        return $output . " &euro;";
+
+        // round the number and add white space as a thousand separator for values >= 1000
+        if(ceil($price) >= 1000) {
+            return number_format(ceil($price), 0, '', ' ') . $currency;
+        }
+
+        // round the number to a whole number for $price < 1000
+        return ceil($price) . $currency;
+
     }
 ?>
 <!DOCTYPE html>
