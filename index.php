@@ -52,13 +52,16 @@
             return $price . $currency;
         }
 
-        // round the number and add white space as a thousand separator for values >= 1000
-        if(ceil($price) >= 1000) {
-            return number_format(ceil($price), 0, '', ' ') . $currency;
+        //round the value to a whole number
+        $price = ceil($price);
+
+        // add white space as a thousand separator for values >= 1000
+        if($price >= 1000) {
+            return number_format($price, 0, '', ' ') . $currency;
         }
 
-        // round the number to a whole number for $price < 1000
-        return ceil($price) . $currency;
+        // don't format a value for $price < 1000
+        return $price . $currency;
 
     }
 ?>
