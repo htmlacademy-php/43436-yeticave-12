@@ -1,6 +1,7 @@
 <?php
     // include a file with helper functions
     require_once('helpers/helpers.php');
+    require_once('helpers/formatters.php');
 
     $isAuth = rand(0, 1);
 
