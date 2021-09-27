@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>
-        <?= $title ?>
+        <?= htmlspecialchars($title) ?>
     </title>
     <link href="./css/normalize.min.css" rel="stylesheet">
     <link href="./css/style.css" rel="stylesheet">
@@ -27,7 +26,7 @@
         <nav class="user-menu">
 
         <!-- show user info if $isAuth is true -->
-        <?php if($isAuth === 1) : ?>
+        <?php if ($isAuth === 1) : ?>
             <div class="user-menu__logged">
                 <p><?= $userName ?></p>
                 <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>

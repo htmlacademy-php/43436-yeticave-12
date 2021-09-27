@@ -1,24 +1,5 @@
 <?php
-    function formatPrice($price) {
-        $currency = ' &euro;';
-
-        // show an input value if $price isn't a numeric type
-        if (!is_numeric($price)) {
-            return $price . $currency;
-        }
-
-        //round the value to a whole number
-        $price = ceil($price);
-
-        // add white space as a thousand separator for values >= 1000
-        if($price >= 1000) {
-            return number_format($price, 0, '', ' ') . $currency;
-        }
-
-        // don't format a value for $price < 1000
-        return $price . $currency;
-
-    }
+    require_once('helpers/formatters.php');
 ?>
 
 <main class="container">
@@ -47,7 +28,7 @@
 
                 <div class="lot__image">
                     <img
-                        src="img/<?= $lotValue['imgUrl'] ?>"
+                        src="img/<?= htmlspecialchars($lotValue['imgUrl']) ?>"
                         alt="<?= htmlspecialchars($lotValue['name']) ?>"
                         width="350"
                         height="260">
@@ -68,7 +49,7 @@
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost">
-                                <?= formatPrice($lotValue['price']) ?>
+                                <?= htmlspecialchars(formatPrice($lotValue['price'])) ?>
                             </span>
                         </div>
                         <div class="lot__timer timer">

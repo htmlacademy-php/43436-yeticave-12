@@ -1,6 +1,6 @@
 <?php
     // include a file with helper functions
-    require_once('helpers.php');
+    require_once('helpers/helpers.php');
 
     $isAuth = rand(0, 1);
 
@@ -64,5 +64,3 @@
 
     // show content of the page
     print($layout);
-?>
-
