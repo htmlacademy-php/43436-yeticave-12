@@ -47,7 +47,7 @@
         ]
     ];
 
-    // call data for header
+    // call data for page content
     $pageHeader = include_template('header.php', [
         'isAuth' => $isAuth,
         'userName' => $userName,
@@ -59,12 +59,12 @@
         'lots' => $lots
     ]);
 
-    // call data for footer
+    // call data for page content
     $pageFooter = include_template('footer.php', [
         'categories' => $categories
     ]);
 
-    // call data for Main page
+    // call data for index.php
     $layout = include_template('layout.php', [
         'title' => 'Main Page',
         'pageHeader' => $pageHeader,
@@ -72,5 +72,5 @@
         'pageFooter' => $pageFooter
     ]);
 
-    // show content on the page
+    // show content of the page
     print($layout);
