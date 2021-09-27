@@ -48,18 +48,28 @@
     ];
 
     // call data for page content
+    $pageHeader = include_template('header.php', [
+        'isAuth' => $isAuth,
+        'userName' => $userName,
+    ]);
+
+    // call data for page content
     $pageContent = include_template('main.php', [
         'categories' => $categories,
         'lots' => $lots
     ]);
 
+    // call data for page content
+    $pageFooter = include_template('footer.php', [
+        'categories' => $categories
+    ]);
+
     // call data for index.php
     $layout = include_template('layout.php', [
         'title' => 'Main Page',
-        'isAuth' => $isAuth,
-        'userName' => $userName,
-        'categories' => $categories,
-        'pageContent' => $pageContent
+        'pageHeader' => $pageHeader,
+        'pageContent' => $pageContent,
+        'pageFooter' => $pageFooter
     ]);
 
     // show content of the page
