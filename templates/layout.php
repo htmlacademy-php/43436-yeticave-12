@@ -12,7 +12,7 @@
 <body>
     <div class="page-wrapper">
 
-        <!-- page content from templates/header.php -->
+        <!-- header from templates/header.php -->
         <?= $pageHeader ?>
 
         <!-- page content from templates/main.php -->
@@ -20,7 +20,7 @@
 
     </div>
 
-    <!-- page content from templates/footer.php -->
+    <!-- footer from templates/footer.php -->
     <?= $pageFooter ?>
 
     <script src="flatpickr.js"></script>
