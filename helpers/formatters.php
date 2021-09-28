@@ -30,3 +30,32 @@ function formatPrice($price) {
     // don't format a value for $price < 1000
     return $price . ' ' . $currency;
 }
+
+
+/**
+ * Calculate remaining time
+ *
+ * @param $expiryDate: date in formate YYYY-MM-DD
+ *
+ * @return array in format [09, 29], where first value is hours and the second one is minutes
+ */
+function calculateRemainingTime($dateTo) {
+
+    // convert dates to timestamp
+    $nowTimestamp = strtotime('now');
+    $expirationTimestamp = strtotime($dateTo);
+
+    // subtract one number from another
+    $remainingTimestamp = $expirationTimestamp - $nowTimestamp;
+
+    // Divide the difference by the number of seconds in a day
+    // 1 hour => 3600
+    // 1 minute => 60
+    $remainingHours = floor($remainingTimestamp / 3600);
+    $remainingMinutes = floor(($remainingTimestamp % 3600) / 60);
+
+    return [
+        'hours' => $remainingHours,
+        'minutes' => $remainingMinutes
+    ];
+}

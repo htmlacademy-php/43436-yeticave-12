@@ -48,8 +48,14 @@
                                 <?= htmlspecialchars(formatPrice($lotValue['price'])) ?>
                             </span>
                         </div>
-                        <div class="lot__timer timer">
-                            12:23
+
+                        <!-- get remaining time for the item -->
+                        <?php $remainingTime = calculateRemainingTime($lotValue['expiryDate']) ?>
+
+                        <!-- add class 'timer--finishing' if $remainingTime less than 1 hour -->
+                        <div class="lot__timer timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?>">
+                            <!-- show $remainingTime -->
+                            <?= $remainingTime['hours'] . ' h : ' . $remainingTime['minutes'] . ' min' ?>
                         </div>
                     </div>
                 </div>
