@@ -50,12 +50,12 @@
                         </div>
 
                         <!-- get remaining time for the item -->
-                        <?php $remainingTime = getDateRange($lotValue['expiryDate']) ?>
+                        <?php $remainingTime = calculateRemainingTime($lotValue['expiryDate']) ?>
 
                         <!-- add class 'timer--finishing' if $remainingTime less than 1 hour -->
-                        <div class="lot__timer timer <?= $remainingTime[0] < 1 ? 'timer--finishing' : ''?>">
+                        <div class="lot__timer timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?>">
                             <!-- show $remainingTime -->
-                            <?= $remainingTime[0] . ' h : ' . $remainingTime[1] . ' min' ?>
+                            <?= $remainingTime['hours'] . ' h : ' . $remainingTime['minutes'] . ' min' ?>
                         </div>
                     </div>
                 </div>

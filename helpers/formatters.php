@@ -39,11 +39,11 @@ function formatPrice($price) {
  *
  * @return array in format [09, 29], where first value is hours and the second one is minutes
  */
-function getDateRange($expiryDate) {
+function calculateRemainingTime($dateTo) {
 
     // convert dates to timestamp
     $nowTimestamp = strtotime('now');
-    $expirationTimestamp = strtotime($expiryDate);
+    $expirationTimestamp = strtotime($dateTo);
 
     // subtract one number from another
     $remainingTimestamp = $expirationTimestamp - $nowTimestamp;
@@ -54,5 +54,8 @@ function getDateRange($expiryDate) {
     $remainingHours = floor($remainingTimestamp / 3600);
     $remainingMinutes = floor(($remainingTimestamp % 3600) / 60);
 
-    return [$remainingHours, $remainingMinutes];
+    return [
+        'hours' => $remainingHours,
+        'minutes' => $remainingMinutes
+    ];
 }
