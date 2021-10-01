@@ -102,14 +102,14 @@ VALUES (NOW(), 8210, '1', '5'),
 
 
 -- get all categories
-SELECT * FROM categories;
+SELECT id, name, technical_name FROM categories;
 
 
 -- get the newest, open lots.
 -- Result should include title, starting price, image link, price, category name
 SELECT l.name, start_price, image_url, c.name as category_name
 FROM lots l
-JOIN categories c ON category_id = c.id
+INNER JOIN categories c ON category_id = c.id
 WHERE expiration_at > NOW()
 ORDER BY created_at DESC;
 
@@ -117,7 +117,7 @@ ORDER BY created_at DESC;
 -- show lot by its IDs. Get the category name to which the lot belongs;
 SELECT l.name as lot_name, c.name as category_name
 FROM lots l
-JOIN categories c ON category_id = c.id
+INNER JOIN categories c ON category_id = c.id
 WHERE l.if = 6;
 
 -- update the name of the lot by its ID
@@ -127,7 +127,7 @@ UPDATE lots SET name = "Test Name" WHERE id = 1;
 -- The list of bids where === its ID, sorted by date.
 SELECT u.email as user_email, l.name as lot_name, r.price, r.created_at, r.lot_id
 FROM rates r
-JOIN users u ON user_id = u.id
-JOIN lots l ON lot_id = l.id
+INNER JOIN users u ON user_id = u.id
+INNER JOIN lots l ON lot_id = l.id
 WHERE r.lot_id = 4
 ORDER BY created_at DESC;
