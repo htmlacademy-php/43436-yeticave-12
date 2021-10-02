@@ -5,9 +5,9 @@
         <ul class="promo__list">
             <!-- Show lots categories -->
             <?php foreach ($categories as $category): ?>
-                <li class="promo__item promo__item--boards">
+                <li class="promo__item promo__item--<?= $category['technical_name'] ?>">
                     <a class="promo__link" href="pages/all-lots.html">
-                        <?= htmlspecialchars($category) ?>
+                        <?= htmlspecialchars($category['name']) ?>
                     </a>
                 </li>
             <?php endforeach; ?>
@@ -24,7 +24,7 @@
 
                 <div class="lot__image">
                     <img
-                        src="img/<?= htmlspecialchars($lotValue['imgUrl']) ?>"
+                        src="img/<?= htmlspecialchars($lotValue['image_url']) ?>"
                         alt="<?= htmlspecialchars($lotValue['name']) ?>"
                         width="350"
                         height="260">
@@ -32,7 +32,7 @@
 
                 <div class="lot__info">
                     <span class="lot__category">
-                        <?= htmlspecialchars($lotValue['category']) ?>
+                        <?= htmlspecialchars($lotValue['category_name']) ?>
                     </span>
 
                     <h3 class="lot__title">
@@ -45,12 +45,12 @@
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost">
-                                <?= htmlspecialchars(formatPrice($lotValue['price'])) ?>
+                                <?= htmlspecialchars(formatPrice($lotValue['start_price'])) ?>
                             </span>
                         </div>
 
                         <!-- get remaining time for the item -->
-                        <?php $remainingTime = calculateRemainingTime($lotValue['expiryDate']) ?>
+                        <?php $remainingTime = calculateRemainingTime($lotValue['expiration_at']) ?>
 
                         <!-- add class 'timer--finishing' if $remainingTime less than 1 hour -->
                         <div class="lot__timer timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?>">

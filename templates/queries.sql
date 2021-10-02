@@ -107,11 +107,12 @@ SELECT id, name, technical_name FROM categories;
 
 -- get the newest, open lots.
 -- Result should include title, starting price, image link, price, category name
-SELECT l.name, start_price, image_url, c.name as category_name
+SELECT l.name, start_price, image_url, c.name as category_name, l.expiration_at
 FROM lots l
 INNER JOIN categories c ON category_id = c.id
 WHERE expiration_at > NOW()
-ORDER BY created_at DESC;
+ORDER BY created_at DESC
+LIMIT 6;
 
 
 -- show lot by its IDs. Get the category name to which the lot belongs;
