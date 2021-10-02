@@ -5,7 +5,7 @@
         <ul class="promo__list">
             <!-- Show lots categories -->
             <?php foreach ($categories as $category): ?>
-                <li class="promo__item promo__item--<?= htmlspecialchars($category['technical_name']) ?>">
+                <li class="promo__item promo__item--<?= htmlspecialchars($category['techName']) ?>">
                     <a class="promo__link" href="pages/all-lots.html">
                         <?= htmlspecialchars($category['name']) ?>
                     </a>

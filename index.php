@@ -13,18 +13,26 @@
 
 
 
-    // --- CATEGORIES ---
+    // --- fetch CATEGORIES ---
+    function fetchCategories() {
+        // SQL query: get all categories
+        $categoriesSqlQuery = 'SELECT name, technical_name FROM categories';
 
-    // SQL query: get all categories
-    $categoriesSqlQuery = 'SELECT name, technical_name FROM categories';
+        // get the categories as array
+        $categories = fetchDBData($categoriesSqlQuery);
 
-     // get the categories as array
-    $categories = fetchDBData($categoriesSqlQuery);
+        return array_map(
+            static function(array $category): array {
+                return [
+                    'name' => $category['name'],
+                    'techName' => $category['technical_name']
+                ];
+            },
+            $categories
+        );
+    }
 
-
-
-    // --- LOTS ---
-
+    // --- fetch LOTS ---
     function fetchLots() {
         // SQL query: get the newest, open lots.
         // Result includes title, starting price, image link, expiration date, category name. show maximum 6 lots
@@ -52,7 +60,10 @@
         );
     }
 
+    // save the result in vars
+    $categories = fetchCategories();
     $lots = fetchLots();
+
 
     // PAGE STRUCTURE
 

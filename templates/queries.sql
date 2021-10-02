@@ -2,12 +2,12 @@ use auctionshop;
 
 -- Insert data into 'categories' table
 INSERT INTO categories (id, name, technical_name)
-VALUES ('1', 'Доски и лыжи', 'category_1'),
-       ('2', 'Крепления', 'category_2'),
-       ('3', 'Ботинки', 'category_3'),
-       ('4', 'Одежда', 'category_4'),
-       ('5', 'Инструменты', 'category_5'),
-       ('6', 'Разное', 'category_6');
+VALUES ('1', 'Доски и лыжи', 'boards'),
+       ('2', 'Крепления', 'attachment'),
+       ('3', 'Ботинки', 'boots'),
+       ('4', 'Одежда', 'clothing'),
+       ('5', 'Инструменты', 'tools'),
+       ('6', 'Разное', 'other');
 
 -- Insert data into 'users' table
 INSERT INTO users (id, registered_at, email, password, phone)
