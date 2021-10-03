@@ -51,19 +51,3 @@ function fetchDBData($sqlQuery) {
     // get the result as array
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 };
-
-
-// !!! TEMPORAL will be removed (during next task) !!!
-$catQuery1 = 'UPDATE categories SET technical_name = "boards" WHERE technical_name = "category_1"';
-$catQuery2 = 'UPDATE categories SET technical_name = "attachment" WHERE technical_name = "category_2"';
-$catQuery3 = 'UPDATE categories SET technical_name = "boots" WHERE technical_name = "category_3"';
-$catQuery4 = 'UPDATE categories SET technical_name = "clothing" WHERE technical_name = "category_4"';
-$catQuery5 = 'UPDATE categories SET technical_name = "tools" WHERE technical_name = "category_5"';
-$catQuery6 = 'UPDATE categories SET technical_name = "other" WHERE technical_name = "category_6"';
-
-getQueryResult($catQuery1);
-getQueryResult($catQuery2);
-getQueryResult($catQuery3);
-getQueryResult($catQuery4);
-getQueryResult($catQuery5);
-getQueryResult($catQuery6);
