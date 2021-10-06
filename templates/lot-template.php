@@ -1,5 +1,4 @@
-
-  <main>
+<main>
     <nav class="nav">
       <ul class="nav__list container">
         <!-- Show lots categories -->
@@ -13,37 +12,37 @@
       </ul>
     </nav>
     <section class="lot-item container">
-            <h2>
-                <?= htmlspecialchars($lot->name) ?>
-            </h2>
+        <h2>
+            <?= htmlspecialchars($lot['name']) ?>
+        </h2>
 
-            <div class="lot-item__content">
-                <div class="lot-item__left">
+        <div class="lot-item__content">
+            <div class="lot-item__left">
 
                 <div class="lot-item__image">
                     <img
-                    src="img/<?= htmlspecialchars($lot->image_url) ?>"
-                    alt="<?= htmlspecialchars($lot->name) ?>"
-                    width="730"
-                    height="548" >
+                        src="img/<?= htmlspecialchars($lot['imageUrl']) ?>"
+                        alt="<?= htmlspecialchars($lot['name']) ?>"
+                        width="730"
+                        height="548" >
                 </div>
 
                 <p class="lot-item__category">Категория:
                     <span>
-                        <?= htmlspecialchars($lot->category_name) ?>
+                        <?= htmlspecialchars($lot['category']) ?>
                     </span>
                 </p>
 
                 <p class="lot-item__description">
-                    <?= htmlspecialchars($lot->description) ?>
+                    <?= htmlspecialchars($lot['description']) ?>
                 </p>
 
-                </div>
-                <div class="lot-item__right">
+            </div>
+            <div class="lot-item__right">
                 <div class="lot-item__state">
 
                     <!-- get remaining time for the item -->
-                    <?php $remainingTime = calculateRemainingTime($lot->expiration_at) ?>
+                    <?php $remainingTime = calculateRemainingTime($lot['expirationDate']) ?>
 
                     <!-- add class 'timer--finishing' if $remainingTime less than 1 hour -->
                     <div class="lot-item__timer timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?>">
@@ -56,14 +55,14 @@
                         <span class="lot-item__amount">Текущая цена</span>
 
                         <span class="lot-item__cost">
-                            <?= htmlspecialchars(formatPrice($lot->start_price)) ?>
+                            <?= htmlspecialchars(formatPrice($lot['startPrice'])) ?>
                         </span>
 
                     </div>
                     <div class="lot-item__min-cost">
                         Мин. ставка
                         <span>
-                            <?= htmlspecialchars(formatPrice($lot->rate_step)) ?>
+                            <?= htmlspecialchars(formatPrice($lot['bitStep'])) ?>
                         </span>
                     </div>
                     </div>
@@ -95,7 +94,7 @@
                         <?php endforeach; ?>
                     </table>
                 </div>
-                </div>
             </div>
+         </div>
     </section>
-  </main>
+</main>

@@ -52,6 +52,8 @@
 
     // --- fetch a specific LOT ---
     function fetchLot($id) {
+        // get global variable with db connection
+        global $dbConnection;
 
         // SQL query: get lot information
         $lotSqlQuery = "SELECT
@@ -65,26 +67,60 @@
             l.expiration_at
             FROM lots l
             INNER JOIN categories c ON category_id = c.id
-            WHERE l.id = '$id'";
+            WHERE l.id = ?"; // '?' is a parameter for mysqli_stmt_bind_param
 
-        // get the categories as array
-        $result = getQueryResult($lotSqlQuery);
+        // Prepares an SQL statement for execution
+        $stmt = mysqli_prepare($dbConnection, $lotSqlQuery);
+        // Binds variables to a prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, 's', $id);
+        // Executes a prepared statement
+        mysqli_stmt_execute($stmt);
+        // Gets a result set from a prepared statement as a mysqli_result object
+        $result = mysqli_stmt_get_result($stmt);
+        // get the result as array
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-        return mysqli_fetch_object($result);
+        if (count($lots) === 0) {
+            return [];
+        }
+
+        // get data for single lot
+        $lot = $lots[0];
+
+        return [
+            'name' => $lot['name'],
+            'description' => $lot['description'],
+            'bitStep' => $lot['rate_step'],
+            'startPrice' => $lot['start_price'],
+            'imageUrl' => $lot['image_url'],
+            'category' => $lot['category_name'],
+            'expirationDate' => $lot['expiration_at']
+        ];
     }
 
      // --- fetch all bits for specific LOT ---
     function fetchBits($lotId) {
+        // get global variable with db connection
+        global $dbConnection;
+
         $query = "SELECT
             created_at,
             price,
             u.name as user_name
             FROM rates r
             INNER JOIN users u ON r.user_id = u.id
-            WHERE r.lot_id = '$lotId'";
+            WHERE r.lot_id = ?"; // '?' is a parameter for mysqli_stmt_bind_param
 
-        // get the bits as array
-        $bits = fetchDBData($query);
+        // Prepares an SQL statement for execution
+        $stmt = mysqli_prepare($dbConnection, $query);
+        // Binds variables to a prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, 's', $lotId);
+        // Executes a prepared statement
+        mysqli_stmt_execute($stmt);
+        // Gets a result set from a prepared statement as a mysqli_result object
+        $result = mysqli_stmt_get_result($stmt);
+        // get the result as array
+        $bits = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         return array_map(
             static function(array $bit): array {
@@ -97,15 +133,3 @@
             $bits
         );
     }
-
-
-    // TEMPORAL: WILL BE DELETED
-    // UNCOMMENT THE STATEMENTS BELOW TO ADD A NEW COLUMN AND VALUES.
-
-    // $temp = "ALTER TABLE users ADD name char(255)";
-    // getQueryResult($temp);
-    // $update1 = "UPDATE users SET name = 'Katia Sheleh' WHERE id='1'";
-    // getQueryResult($update1);
-    // $update2 = "UPDATE users SET name = 'Kate Sh' WHERE id=2";
-    // getQueryResult($update2);
-

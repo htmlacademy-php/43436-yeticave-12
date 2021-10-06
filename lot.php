@@ -22,12 +22,13 @@
     $lot = fetchLot($lotId); // src => helpers/fetchers.php
 
     // show 404 error if lot doesn't exist
-    if (empty($lot) === true || is_null($lot) === true) {
+    if (empty($lot) === true) {
         show404();
     }
 
     $bits = fetchBits($lotId); // src => helpers/fetchers.php
     $categories = fetchCategories(); // src => helpers/fetchers.php
+
 
     // PAGE STRUCTURE
 
@@ -40,7 +41,7 @@
 
     // call data for index.php
     $layout = include_template('layout.php', [
-        'title' => $lot ? $lot->name : 'Not found',
+        'title' => $lot ? $lot['name'] : 'Not found',
         'isAuth' => $isAuth,
         'userName' => $userName,
         'categories' => $categories,
