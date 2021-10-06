@@ -13,9 +13,8 @@
       </ul>
     </nav>
     <section class="lot-item container">
-        <?php foreach ($lot as $l): ?>
             <h2>
-                <?= htmlspecialchars($l['name']) ?>
+                <?= htmlspecialchars($lot->name) ?>
             </h2>
 
             <div class="lot-item__content">
@@ -23,20 +22,20 @@
 
                 <div class="lot-item__image">
                     <img
-                    src="img/<?= htmlspecialchars($l['imageUrl']) ?>"
-                    alt="<?= htmlspecialchars($l['name']) ?>"
+                    src="img/<?= htmlspecialchars($lot->image_url) ?>"
+                    alt="<?= htmlspecialchars($lot->name) ?>"
                     width="730"
                     height="548" >
                 </div>
 
                 <p class="lot-item__category">Категория:
                     <span>
-                        <?= htmlspecialchars($l['category']) ?>
+                        <?= htmlspecialchars($lot->category_name) ?>
                     </span>
                 </p>
 
                 <p class="lot-item__description">
-                    <?= htmlspecialchars($l['description']) ?>
+                    <?= htmlspecialchars($lot->description) ?>
                 </p>
 
                 </div>
@@ -44,7 +43,7 @@
                 <div class="lot-item__state">
 
                     <!-- get remaining time for the item -->
-                    <?php $remainingTime = calculateRemainingTime($l['expirationDate']) ?>
+                    <?php $remainingTime = calculateRemainingTime($lot->expiration_at) ?>
 
                     <!-- add class 'timer--finishing' if $remainingTime less than 1 hour -->
                     <div class="lot-item__timer timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?>">
@@ -57,14 +56,14 @@
                         <span class="lot-item__amount">Текущая цена</span>
 
                         <span class="lot-item__cost">
-                            <?= htmlspecialchars(formatPrice($l['startPrice'])) ?>
+                            <?= htmlspecialchars(formatPrice($lot->start_price)) ?>
                         </span>
 
                     </div>
                     <div class="lot-item__min-cost">
                         Мин. ставка
                         <span>
-                            <?= htmlspecialchars(formatPrice($l['rateStep'])) ?>
+                            <?= htmlspecialchars(formatPrice($lot->rate_step)) ?>
                         </span>
                     </div>
                     </div>
@@ -77,63 +76,26 @@
                     <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
+
                 <div class="history">
-                    <h3>История ставок (<span>10</span>)</h3>
+                    <h3>История ставок (<span><?= htmlspecialchars(count($bits)) ?></span>)</h3>
                     <table class="history__list">
-                    <tr class="history__item">
-                        <td class="history__name">Иван</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">5 минут назад</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Константин</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">20 минут назад</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Евгений</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">Час назад</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Игорь</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 08:21</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Енакентий</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 13:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Семён</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 12:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Илья</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 10:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Енакентий</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 13:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Семён</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 12:20</td>
-                    </tr>
-                    <tr class="history__item">
-                        <td class="history__name">Илья</td>
-                        <td class="history__price">10 999 р</td>
-                        <td class="history__time">19.03.17 в 10:20</td>
-                    </tr>
+                        <?php foreach ($bits as $bit): ?>
+                            <tr class="history__item">
+                                <td class="history__name">
+                                    <?= htmlspecialchars($bit['userName']) ?>
+                                </td>
+                                <td class="history__price">
+                                    <?= htmlspecialchars(formatPrice($bit['bitPrice'])) ?>
+                                </td>
+                                <td class="history__time">
+                                    <?= htmlspecialchars(date('d.m.Y',strtotime($bit['bitCreated']))) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </table>
                 </div>
                 </div>
             </div>
-        <?php endforeach; ?>
     </section>
   </main>

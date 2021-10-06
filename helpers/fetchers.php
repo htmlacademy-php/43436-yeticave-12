@@ -54,28 +54,58 @@
     function fetchLot($id) {
 
         // SQL query: get lot information
-        $lotsSqlQuery = "SELECT l.id, l.name, l.description, l.rate_step, start_price, image_url, c.name as category_name, l.expiration_at
+        $lotSqlQuery = "SELECT
+            l.id,
+            l.name,
+            l.description,
+            l.rate_step,
+            l.start_price,
+            l.image_url,
+            c.name as category_name,
+            l.expiration_at
             FROM lots l
             INNER JOIN categories c ON category_id = c.id
-            WHERE l.id = '. $id .' ";
+            WHERE l.id = '$id'";
 
         // get the categories as array
-        $lots = fetchDBData($lotsSqlQuery);
+        $result = getQueryResult($lotSqlQuery);
 
+        return mysqli_fetch_object($result);
+    }
+
+     // --- fetch all bits for specific LOT ---
+    function fetchBits($lotId) {
+        $query = "SELECT
+            created_at,
+            price,
+            u.name as user_name
+            FROM rates r
+            INNER JOIN users u ON r.user_id = u.id
+            WHERE r.lot_id = '$lotId'";
+
+        // get the bits as array
+        $bits = fetchDBData($query);
 
         return array_map(
-            static function(array $lot): array {
+            static function(array $bit): array {
                 return [
-                    'id' => $lot['id'],
-                    'name' => $lot['name'],
-                    'description' => $lot['description'],
-                    'rateStep' => $lot['rate_step'],
-                    'startPrice' => $lot['start_price'],
-                    'imageUrl' => $lot['image_url'],
-                    'category' => $lot['category_name'],
-                    'expirationDate' => $lot['expiration_at']
+                    'bitCreated' => $bit['created_at'],
+                    'userName' => $bit['user_name'],
+                    'bitPrice' => $bit['price']
                 ];
             },
-            $lots
+            $bits
         );
     }
+
+
+    // TEMPORAL: WILL BE DELETED
+    // UNCOMMENT THE STATEMENTS BELOW TO ADD A NEW COLUMN AND VALUES.
+
+    // $temp = "ALTER TABLE users ADD name char(255)";
+    // getQueryResult($temp);
+    // $update1 = "UPDATE users SET name = 'Katia Sheleh' WHERE id='1'";
+    // getQueryResult($update1);
+    // $update2 = "UPDATE users SET name = 'Kate Sh' WHERE id=2";
+    // getQueryResult($update2);
+

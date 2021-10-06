@@ -10,9 +10,9 @@ VALUES ('1', 'Доски и лыжи', 'boards'),
        ('6', 'Разное', 'other');
 
 -- Insert data into 'users' table
-INSERT INTO users (id, registered_at, email, password, phone)
-VALUES ('1', NOW(), 'kate.sheleh@gmail.com', PASSWORD('1111'), '222 222 222 222'),
-       ('2', NOW(), 'kate220485@gmail.com', PASSWORD('2222'), '123 123 123 123');
+INSERT INTO users (id, registered_at, email, password, phone, name)
+VALUES ('1', NOW(), 'kate.sheleh@gmail.com', PASSWORD('1111'), '222 222 222 222', 'Katia Sheleh'),
+       ('2', NOW(), 'kate220485@gmail.com', PASSWORD('2222'), '123 123 123 123', 'Kate Sh');
 
 -- Insert data into 'lots' table
 INSERT INTO lots (id, created_at, name, description, image_url, start_price, expiration_at, rate_step, category_id, author_id)

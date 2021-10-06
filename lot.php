@@ -11,7 +11,6 @@
 
     $userName = 'Katia Sheleh';
 
-    $categories = fetchCategories(); // src => helpers/fetchers.php
 
     $lotId = $_GET['id'];
 
@@ -22,22 +21,26 @@
 
     $lot = fetchLot($lotId); // src => helpers/fetchers.php
 
-    // show 404 error if the result is an empty array
-    if (count($lot) === 0) {
+    // show 404 error if lot doesn't exist
+    if (empty($lot) === true || is_null($lot) === true) {
         show404();
     }
+
+    $bits = fetchBits($lotId); // src => helpers/fetchers.php
+    $categories = fetchCategories(); // src => helpers/fetchers.php
 
     // PAGE STRUCTURE
 
     // call data for page content
     $pageContent = include_template('lot-template.php', [
         'categories' => $categories,
-        'lot' => $lot
+        'lot' => $lot,
+        'bits' => $bits
     ]);
 
     // call data for index.php
     $layout = include_template('layout.php', [
-        'title' => $lot ? $lot[0]['name'] : 'Not found',
+        'title' => $lot ? $lot->name : 'Not found',
         'isAuth' => $isAuth,
         'userName' => $userName,
         'categories' => $categories,
