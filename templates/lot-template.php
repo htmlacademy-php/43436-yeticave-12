@@ -13,9 +13,9 @@
       </ul>
     </nav>
     <section class="lot-item container">
-        <?php foreach ($lots as $lot): ?>
+        <?php foreach ($lot as $l): ?>
             <h2>
-                <?= htmlspecialchars($lot['name']) ?>
+                <?= htmlspecialchars($l['name']) ?>
             </h2>
 
             <div class="lot-item__content">
@@ -23,20 +23,20 @@
 
                 <div class="lot-item__image">
                     <img
-                    src="img/<?= htmlspecialchars($lot['imageUrl']) ?>"
-                    alt="<?= htmlspecialchars($lot['name']) ?>"
+                    src="img/<?= htmlspecialchars($l['imageUrl']) ?>"
+                    alt="<?= htmlspecialchars($l['name']) ?>"
                     width="730"
                     height="548" >
                 </div>
 
                 <p class="lot-item__category">Категория:
                     <span>
-                        <?= htmlspecialchars($lot['category']) ?>
+                        <?= htmlspecialchars($l['category']) ?>
                     </span>
                 </p>
 
                 <p class="lot-item__description">
-                    <?= htmlspecialchars($lot['description']) ?>
+                    <?= htmlspecialchars($l['description']) ?>
                 </p>
 
                 </div>
@@ -44,7 +44,7 @@
                 <div class="lot-item__state">
 
                     <!-- get remaining time for the item -->
-                    <?php $remainingTime = calculateRemainingTime($lot['expirationDate']) ?>
+                    <?php $remainingTime = calculateRemainingTime($l['expirationDate']) ?>
 
                     <!-- add class 'timer--finishing' if $remainingTime less than 1 hour -->
                     <div class="lot-item__timer timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?>">
@@ -57,14 +57,14 @@
                         <span class="lot-item__amount">Текущая цена</span>
 
                         <span class="lot-item__cost">
-                            <?= htmlspecialchars(formatPrice($lot['startPrice'])) ?>
+                            <?= htmlspecialchars(formatPrice($l['startPrice'])) ?>
                         </span>
 
                     </div>
                     <div class="lot-item__min-cost">
                         Мин. ставка
                         <span>
-                            <?= htmlspecialchars(formatPrice($lot['rateStep'])) ?>
+                            <?= htmlspecialchars(formatPrice($l['rateStep'])) ?>
                         </span>
                     </div>
                     </div>

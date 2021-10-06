@@ -54,10 +54,10 @@
     function fetchLot($id) {
 
         // SQL query: get lot information
-        $lotsSqlQuery = 'SELECT l.id, l.name, l.description, l.rate_step, start_price, image_url, c.name as category_name, l.expiration_at
+        $lotsSqlQuery = "SELECT l.id, l.name, l.description, l.rate_step, start_price, image_url, c.name as category_name, l.expiration_at
             FROM lots l
             INNER JOIN categories c ON category_id = c.id
-            WHERE l.id = ' . $id;
+            WHERE l.id = '. $id .' ";
 
         // get the categories as array
         $lots = fetchDBData($lotsSqlQuery);

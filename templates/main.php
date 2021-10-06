@@ -36,7 +36,7 @@
                     </span>
 
                     <h3 class="lot__title">
-                        <a class="text-link" href="lot.php?id=<?= $lot['id'] ?>">
+                        <a class="text-link" href="lot.php?id=<?= htmlspecialchars($lot['id']) ?>">
                             <?= htmlspecialchars($lot['name']) ?>
                         </a>
                     </h3>
