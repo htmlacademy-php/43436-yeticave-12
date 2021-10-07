@@ -5,7 +5,7 @@
     // --- fetch CATEGORIES ---
     function fetchCategories() {
         // SQL query: get all categories
-        $categoriesSqlQuery = 'SELECT name, technical_name FROM categories';
+        $categoriesSqlQuery = 'SELECT id, name, technical_name FROM categories';
 
         // get the categories as array
         $categories = fetchDBData($categoriesSqlQuery);
@@ -13,6 +13,7 @@
         return array_map(
             static function(array $category): array {
                 return [
+                    'id' => $category['id'],
                     'name' => $category['name'],
                     'techName' => $category['technical_name']
                 ];
