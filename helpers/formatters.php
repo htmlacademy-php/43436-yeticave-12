@@ -59,3 +59,12 @@ function calculateRemainingTime($dateTo) {
         'minutes' => $remainingMinutes
     ];
 }
+
+
+/**
+ * Show 404 error
+ */
+function show404() {
+    header('404', true, 404);
+    die();
+}
