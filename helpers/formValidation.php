@@ -81,32 +81,23 @@
      *
      * @return string warning text or nothing
      */
-    function validateImage($fieldName, $filePath) {
-        $errorMessage = 'Upload a picture in the format png, jpg, jpeg';
+   function validateImage($fieldName)
+{
+    $errorMessage = 'Upload a picture in the format png, jpg, jpeg';
 
-        // show warning if there are no image uploaded
-        if (!isset($_FILES[$fieldName]) || $_FILES[$fieldName]['size'] === 0) {
-            return $errorMessage;
-        }
-
-        // if the image is uploaded
-        if (isset($_FILES[$fieldName])) {
-
-            // move the image to the folder "uploads"
-            $uploadFile = $filePath . $_FILES[$fieldName]['name'];
-            move_uploaded_file($_FILES[$fieldName]['tmp_name'], $uploadFile);
-
-            // if the image was added to the folder "uploads"
-            if (move_uploaded_file($_FILES[$fieldName]['tmp_name'], $filePath . $_FILES[$fieldName]['name'])) {
-                // get mime content type
-                $mType = mime_content_type($filePath . $_FILES[$fieldName]['name']);
-
-                if (!in_array($mType, ['image/jpg', 'image/jpeg', 'image/png'], true)) {
-                    return $errorMessage;
-                }
-            }
-        }
+    // show warning if there are no image uploaded
+    if (!isset($_FILES[$fieldName]) || $_FILES[$fieldName]['size'] === 0) {
+        return $errorMessage;
     }
+
+    $mType = mime_content_type($_FILES[$fieldName]['tmp_name']); // В tmp_name лежит прямой путь до файла (временное местоположение)
+
+    if (!in_array($mType, ['image/jpg', 'image/jpeg', 'image/png'], true)) {
+        return $errorMessage;
+    }
+
+    return null;
+}
 
     /**
      * Validate positive number
