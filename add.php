@@ -45,6 +45,7 @@
     ];
 
 
+    // check errors in all fields ($_POST)
     foreach ($_POST as $key => $value) {
         if (isset($rules[$key])) {
             $rule = $rules[$key];
@@ -52,15 +53,18 @@
         }
     }
 
-    foreach ($_FILES as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errors[$key] = $rule();
+    // check errors in the file field ($_FILES)
+    if (isset($_POST['submit'])) {
+        if (isset($rules['lot-img'])) {
+            $rule = $rules['lot-img'];
+            $errors['lot-img'] = $rule();
         }
     }
 
+    // clean entries with value NULL
     $errors = array_filter($errors);
 
+    // actions after form submitting
     if($_SERVER['REQUEST_METHOD'] === 'POST' && count($errors) === 0) {
         $name = trim($_POST['lot-name']);
         $description = trim($_POST['message']);

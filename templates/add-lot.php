@@ -95,6 +95,6 @@
         <span class="form__error form__error--bottom">
             <?= count($errors) > 0 ? 'Please correct the errors in the form.' : '' ?>
         </span>
-        <button type="submit" class="button">Добавить лот</button>
+        <button type="submit" class="button" name="submit">Добавить лот</button>
     </form>
 </main>
