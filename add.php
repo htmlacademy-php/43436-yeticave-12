@@ -1,4 +1,8 @@
 <?php
+    ini_set('error_reporting', E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+
     // include files
     require_once('helpers/helpers.php');
     require_once('helpers/formatters.php');
@@ -48,30 +52,29 @@
         }
     }
 
-    // clean NULL entries
     $errors = array_filter($errors);
 
     if($_SERVER['REQUEST_METHOD'] === 'POST' && count($errors) === 0) {
-        $name = $_POST['lot-name'];
-        $description = $_POST['message'];
+        $name = trim($_POST['lot-name']);
+        $description = trim($_POST['message']);
         $rateStep = $_POST['lot-step'];
         $startPrice = $_POST['lot-rate'];
-        $imageUrl = $_POST['lot-img'];
+        $imageUrl = $_FILES['lot-img']['name'];
         $expirationDate = $_POST['lot-date'];
         $categoryId = $_POST['category'];
 
         createNewLot($name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, '1');
+
         // empty errors
         $errors = [];
 
-        // Не выполняется эта функция
-        // Что здеcь неправильно?
-        // move the image to uploads folder
+        // move the image to the folder "uploads"
         if (isset($_FILES['lot-img'])) {
             $filePath = __DIR__ . '/uploads/';
-            $uploadFile = $filePath . basename($_FILES['lot-img']['name']);
+            $uploadFile = $filePath . $_FILES['lot-img']['name'];
             move_uploaded_file($_FILES['lot-img']['tmp_name'], $uploadFile);
         }
+
     }
 
     // PAGE STRUCTURE

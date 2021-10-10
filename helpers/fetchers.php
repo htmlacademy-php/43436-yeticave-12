@@ -146,14 +146,14 @@
         // Prepares an SQL statement for execution
         $stmt = mysqli_prepare($dbConnection, $sqlQuery);
         // Binds variables to a prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, 'ssddssss', $name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $userId);
+        mysqli_stmt_bind_param($stmt, 'ssddssii', $name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $userId);
         // Executes a prepared statement
         mysqli_stmt_execute($stmt);
 
-        // Последний id вседа int(0)
-        // В чем ошибка?
+        // get last created id
         $lastId = mysqli_insert_id($dbConnection);
 
+        // TODO remove 43436-yeticave-12 directory
         // redirect to a page with the lot information
-        header("Location:/43436-yeticave-12/lot.php?&id='$lastId'");
+        header("Location:/43436-yeticave-12/lot.php?&id=$lastId");
     }

@@ -1,24 +1,23 @@
 use auctionshop;
 
 -- Insert data into 'categories' table
-INSERT INTO categories (id, name, technical_name)
-VALUES ('1', 'Доски и лыжи', 'boards'),
-       ('2', 'Крепления', 'attachment'),
-       ('3', 'Ботинки', 'boots'),
-       ('4', 'Одежда', 'clothing'),
-       ('5', 'Инструменты', 'tools'),
-       ('6', 'Разное', 'other');
+INSERT INTO categories (name, technical_name)
+VALUES ('Доски и лыжи', 'boards'),
+       ('Крепления', 'attachment'),
+       ('Ботинки', 'boots'),
+       ('Одежда', 'clothing'),
+       ('Инструменты', 'tools'),
+       ('Разное', 'other');
 
 -- Insert data into 'users' table
-INSERT INTO users (id, registered_at, email, password, phone, name)
-VALUES ('1', NOW(), 'kate.sheleh@gmail.com', PASSWORD('1111'), '222 222 222 222', 'Katia Sheleh'),
-       ('2', NOW(), 'kate220485@gmail.com', PASSWORD('2222'), '123 123 123 123', 'Kate Sh');
+INSERT INTO users (registered_at, email, password, phone, name)
+VALUES (NOW(), 'kate.sheleh@gmail.com', PASSWORD('1111'), '222 222 222 222', 'Katia Sheleh'),
+       (NOW(), 'kate220485@gmail.com', PASSWORD('2222'), '123 123 123 123', 'Kate Sh');
 
 -- Insert data into 'lots' table
-INSERT INTO lots (id, created_at, name, description, image_url, start_price, expiration_at, rate_step, category_id, author_id)
+INSERT INTO lots (created_at, name, description, image_url, start_price, expiration_at, rate_step, category_id, author_id)
 VALUES
 (
-    '1',
     NOW(),
     '2014 Rossignol District Snowboard',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
@@ -30,7 +29,6 @@ VALUES
     '1'
   ),
   (
-    '2',
     NOW(),
     'DC Ply Mens 2016/2017 Snowboard',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
@@ -42,7 +40,6 @@ VALUES
     '1'
   ),
   (
-    '3',
     NOW(),
     'Крепления Union Contact Pro 2015 года размер L/XL',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
@@ -54,7 +51,6 @@ VALUES
     '1'
   ),
   (
-    '4',
     NOW(),
     'Ботинки для сноуборда DC Mutiny Charocal',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
@@ -66,7 +62,6 @@ VALUES
     '2'
   ),
   (
-    '5',
     NOW(),
     'Куртка для сноуборда DC Mutiny Charocal',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
@@ -78,7 +73,6 @@ VALUES
     '2'
   ),
   (
-    '6',
     NOW(),
     'Маска Oakley Canopy',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',

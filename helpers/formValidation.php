@@ -84,8 +84,6 @@
     function validateImage($fieldName) {
         $errorMessage = 'Upload a picture in the format png, jpg, jpeg';
 
-        // Не сохраняется и сбрасывается значение загруженного файла и поэтому всегда попадает в этот if
-        // В чем ошибка?
         if (!isset($_FILES[$fieldName]) || $_FILES[$fieldName]['size'] === 0) {
             return $errorMessage;
         }
@@ -95,11 +93,9 @@
             // get mime content type
             $mType = mime_content_type($_FILES[$fieldName]);
 
-            if ($mType !== 'image/jpg' || $mType !== 'image/jpeg' || $mType !== 'image/png') {
-                finfo_close($_FILES[$fieldName]);
+            if (!in_array($mType, ['image/jpg', 'image/jpeg', 'image/png'], true)) {
                 return $errorMessage;
             }
-            finfo_close($_FILES[$fieldName]);
           }
     }
 

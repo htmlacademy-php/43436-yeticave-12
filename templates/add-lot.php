@@ -11,7 +11,7 @@
             <?php endforeach; ?>
         </ul>
     </nav>
-    <form class="form form--add-lot container form--invalid" action="add.php" method="post">
+    <form class="form form--add-lot container form--invalid" action="add.php" method="post" enctype="multipart/form-data">
         <!-- form--invalid -->
         <h2>Добавление лота</h2>
         <div class="form__container-two">
@@ -54,7 +54,7 @@
         <div class="form__item form__item--file <?= isset($errors['lot-img']) ? "form__item--invalid" : ""; ?>">
             <label>Изображение <sup>*</sup></label>
             <div class="form__input-file">
-                <input type="file" id="lot-img"
+                <input class="visually-hidden" type="file" id="lot-img"
                     value="<?= htmlspecialchars(getPostVal('lot-img')); ?>" name="lot-img">
                 <label for="lot-img">Добавить</label>
                 <span class="form__error">
