@@ -83,6 +83,13 @@
         // empty errors
         $errors = [];
 
+        // get last created id
+        $lastId = mysqli_insert_id($dbConnection);
+
+        // TODO remove 43436-yeticave-12 directory
+        // redirect to a page with the lot information
+        header("Location:/43436-yeticave-12/lot.php?&id=$lastId");
+
     }
 
     // PAGE STRUCTURE

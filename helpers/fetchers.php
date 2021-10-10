@@ -149,11 +149,4 @@
         mysqli_stmt_bind_param($stmt, 'ssddssii', $name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $userId);
         // Executes a prepared statement
         mysqli_stmt_execute($stmt);
-
-        // get last created id
-        $lastId = mysqli_insert_id($dbConnection);
-
-        // TODO remove 43436-yeticave-12 directory
-        // redirect to a page with the lot information
-        header("Location:/43436-yeticave-12/lot.php?&id=$lastId");
     }
