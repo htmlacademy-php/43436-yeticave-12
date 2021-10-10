@@ -31,7 +31,7 @@
             return validateText($_POST['message'], 20, 300, 'Enter the lot description');
         },
         'lot-img' => function () {
-            return validateImage('lot-img');
+            return validateImage('lot-img', __DIR__ . '/uploads/');
         },
         'lot-rate' => function () {
             return validateNotNegativeNumber($_POST['lot-rate'], 'Enter the starting price');
@@ -46,6 +46,13 @@
 
 
     foreach ($_POST as $key => $value) {
+        if (isset($rules[$key])) {
+            $rule = $rules[$key];
+            $errors[$key] = $rule();
+        }
+    }
+
+    foreach ($_FILES as $key => $value) {
         if (isset($rules[$key])) {
             $rule = $rules[$key];
             $errors[$key] = $rule();
@@ -67,13 +74,6 @@
 
         // empty errors
         $errors = [];
-
-        // move the image to the folder "uploads"
-        if (isset($_FILES['lot-img'])) {
-            $filePath = __DIR__ . '/uploads/';
-            $uploadFile = $filePath . $_FILES['lot-img']['name'];
-            move_uploaded_file($_FILES['lot-img']['tmp_name'], $uploadFile);
-        }
 
     }
 
