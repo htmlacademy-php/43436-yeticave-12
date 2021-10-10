@@ -85,12 +85,12 @@
         $errorMessage = 'Upload a picture in the format png, jpg, jpeg';
 
         // show warning if there are no image uploaded
-        if (!isset($_FILES[$fieldName]['name']) || $_FILES[$fieldName]['size'] === 0) {
+        if (!isset($_FILES[$fieldName]) || $_FILES[$fieldName]['size'] === 0) {
             return $errorMessage;
         }
 
         // if the image is uploaded
-        if (isset($_FILES[$fieldName]['name'])) {
+        if (isset($_FILES[$fieldName])) {
 
             // move the image to the folder "uploads"
             $uploadFile = $filePath . $_FILES[$fieldName]['name'];
