@@ -84,17 +84,19 @@
     function validateImage($fieldName, $filePath) {
         $errorMessage = 'Upload a picture in the format png, jpg, jpeg';
 
+        // show warning if there are no image uploaded
         if (!isset($_FILES[$fieldName]['name']) || $_FILES[$fieldName]['size'] === 0) {
             return $errorMessage;
         }
 
+        // if the image is uploaded
         if (isset($_FILES[$fieldName]['name'])) {
 
-            if (isset($_FILES[$fieldName])) {
-                $uploadFile = $filePath . $_FILES[$fieldName]['name'];
-                move_uploaded_file($_FILES[$fieldName]['tmp_name'], $uploadFile);
-            }
+            // move the image to the folder "uploads"
+            $uploadFile = $filePath . $_FILES[$fieldName]['name'];
+            move_uploaded_file($_FILES[$fieldName]['tmp_name'], $uploadFile);
 
+            // if the image was added to the folder "uploads"
             if (move_uploaded_file($_FILES[$fieldName]['tmp_name'], $filePath . $_FILES[$fieldName]['name'])) {
                 // get mime content type
                 $mType = mime_content_type($filePath . $_FILES[$fieldName]['name']);
