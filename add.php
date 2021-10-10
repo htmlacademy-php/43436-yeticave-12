@@ -54,10 +54,14 @@
     }
 
     // check errors in the file field ($_FILES)
-    if (isset($_POST['submit'])) {
-        if (isset($rules['lot-img'])) {
-            $rule = $rules['lot-img'];
-            $errors['lot-img'] = $rule();
+     if (isset($_FILES['lot-img'])) {
+        $error = validateImage('lot-img');
+
+        if (null === $error) {
+            $filePath = __DIR__ . '/uploads/';
+            move_uploaded_file($_FILES['lot-img']['tmp_name'], $filePath . $_FILES['lot-img']['name']);
+        } else {
+            $errors['lot-img'] = $error;
         }
     }
 
