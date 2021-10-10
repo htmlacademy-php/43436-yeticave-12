@@ -31,23 +31,21 @@
                 <select id="category" name="category" value="<?= htmlspecialchars(getPostVal('category')); ?>">
                     <option disable selected value>Выберите категорию</option>
                     <?php foreach ($categories as $category): ?>
-                    <option value=<?= htmlspecialchars($category['id']) ?>><?= htmlspecialchars($category['name']) ?></option>
+                    <option value=<?= htmlspecialchars($category['id']) ?>><?= htmlspecialchars($category['name']) ?>
+                    </option>
                     <?php endforeach; ?>
                 </select>
 
                 <span class="form__error">
                     <?=$errors['category'] ?? ""; ?>
-                    Выберите категорию
                 </span>
             </div>
         </div>
 
         <div class="form__item form__item--wide <?= isset($errors['message']) ? "form__item--invalid" : ""; ?>">
             <label for="message">Описание <sup>*</sup></label>
-            <textarea id="message" name="message" placeholder="Напишите описание лота">
-                <?= htmlspecialchars(getPostVal('message')); ?>
-            </textarea>
-
+            <textarea id="message" name="message"
+                placeholder="Напишите описание лота"><?= htmlspecialchars(getPostVal('message')); ?></textarea>
             <span class="form__error">
                 <?=$errors['message'] ?? ""; ?>
             </span>
@@ -56,9 +54,12 @@
         <div class="form__item form__item--file <?= isset($errors['lot-img']) ? "form__item--invalid" : ""; ?>">
             <label>Изображение <sup>*</sup></label>
             <div class="form__input-file">
-                <input class="visually-hidden" type="file" id="lot-img"
+                <input type="file" id="lot-img"
                     value="<?= htmlspecialchars(getPostVal('lot-img')); ?>" name="lot-img">
                 <label for="lot-img">Добавить</label>
+                <span class="form__error">
+                    <?=$errors['lot-img'] ?? ""; ?>
+                </span>
             </div>
         </div>
 

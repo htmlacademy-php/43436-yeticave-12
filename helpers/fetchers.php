@@ -134,3 +134,26 @@
             $bits
         );
     }
+
+    function createNewLot($name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $userId) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        $sqlQuery = "INSERT INTO lots
+        (created_at, name, description, rate_step, start_price, image_url, expiration_at, category_id, author_id)
+        VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        // Prepares an SQL statement for execution
+        $stmt = mysqli_prepare($dbConnection, $sqlQuery);
+        // Binds variables to a prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, 'ssddssss', $name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $userId);
+        // Executes a prepared statement
+        mysqli_stmt_execute($stmt);
+
+        // Последний id вседа int(0)
+        // В чем ошибка?
+        $lastId = mysqli_insert_id($dbConnection);
+
+        // redirect to a page with the lot information
+        header("Location:/43436-yeticave-12/lot.php?&id='$lastId'");
+    }

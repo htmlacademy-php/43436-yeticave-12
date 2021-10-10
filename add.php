@@ -18,27 +18,28 @@
     $errors = [];
     $rules = [
         'lot-name' => function () {
-            return validateText('lot-name', 10, 70, 'Enter the lot name');
+            return validateText($_POST['lot-name'], 10, 70, 'Enter the lot name');
         },
         'category' => function () {
-            return validateFilled('category');
+            return validateFilled($_POST['category'], 'Select a category');
         },
         'message' => function () {
-            return validateText('message', 20, 300, 'Enter the lot description');
+            return validateText($_POST['message'], 20, 300, 'Enter the lot description');
         },
         'lot-img' => function () {
             return validateImage('lot-img');
         },
         'lot-rate' => function () {
-            return validatePositiveNumber('lot-rate', 'Enter the starting price');
+            return validateNotNegativeNumber($_POST['lot-rate'], 'Enter the starting price');
         },
         'lot-step' => function () {
-            return validatePositiveNumber('lot-step', 'Enter the rate step');
+            return validateNotNegativeNumber($_POST['lot-step'], 'Enter the rate step');
         },
         'lot-date' => function () {
-            return validateDate('lot-date');
+            return validateDate($_POST['lot-date']);
         }
     ];
+
 
     foreach ($_POST as $key => $value) {
         if (isset($rules[$key])) {
@@ -47,34 +48,29 @@
         }
     }
 
+    // clean NULL entries
     $errors = array_filter($errors);
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if($_SERVER['REQUEST_METHOD'] === 'POST' && count($errors) === 0) {
+        $name = $_POST['lot-name'];
+        $description = $_POST['message'];
+        $rateStep = $_POST['lot-step'];
+        $startPrice = $_POST['lot-rate'];
+        $imageUrl = $_POST['lot-img'];
+        $expirationDate = $_POST['lot-date'];
+        $categoryId = $_POST['category'];
 
-        if(count($errors) === 0) {
-            $name = $_POST['lot-name'];
-            $description = $_POST['message'];
-            $rateStep = $_POST['lot-step'];
-            $startPrice = $_POST['lot-rate'];
-            $imageUrl = $_POST['lot-img'] ?? "";
-            $expirationDate = $_POST['lot-date'];
-            $categoryId = $_POST['category'];
+        createNewLot($name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, '1');
+        // empty errors
+        $errors = [];
 
-            $sqlQuery = "INSERT INTO lots
-            (created_at, name, description, rate_step, start_price, image_url, expiration_at, category_id, author_id)
-            VALUES (NOW(), '$name', '$description', '$rateStep', '$startPrice', '$imageUrl', '$expirationDate', '$categoryId', '2')";
-
-            getQueryResult($sqlQuery);
-            // empty errors
-            $errors = [];
-
-            // move the image to uploads folder
-            if (isset($_FILES['lot-img'])) {
-                $fileName = $_FILES['lot-img'];
-                $filePath = __DIR__ . '/uploads/';
-                $fileUrl = '/uploads/' . $fileName;
-                move_uploaded_file($_FILES['lot-img'], $filePath . $fileName);
-            }
+        // Не выполняется эта функция
+        // Что здеcь неправильно?
+        // move the image to uploads folder
+        if (isset($_FILES['lot-img'])) {
+            $filePath = __DIR__ . '/uploads/';
+            $uploadFile = $filePath . basename($_FILES['lot-img']['name']);
+            move_uploaded_file($_FILES['lot-img']['tmp_name'], $uploadFile);
         }
     }
 

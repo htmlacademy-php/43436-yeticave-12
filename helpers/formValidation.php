@@ -1,6 +1,6 @@
 <?php
     /**
-     * show value of the field name
+     * show value of the field name ONLY for POST method
      *
      * @param $name: field name
      *
@@ -31,9 +31,9 @@
      *
      * @return string field value
      */
-    function validateFilled($fieldName) {
-        if (empty($_POST[$fieldName])) {
-            return "The field can't be empty";
+    function validateFilled($fieldName, $errorMessage = "The field can't be empty") {
+        if (empty($fieldName)) {
+            return $errorMessage;
         }
     }
 
@@ -47,9 +47,9 @@
      * @return string field value
      */
     function isCorrectLength($fieldName, $minChars, $maxChars) {
-        $len = strlen($_POST[$fieldName]);
+        $len = strlen($fieldName);
 
-        if ($len < $minChars or $len > $maxChars) {
+        if ($len < $minChars || $len > $maxChars) {
             return "The value must be between $minChars and $maxChars characters";
         }
     }
@@ -65,10 +65,11 @@
      * @return string warning text or nothing
      */
     function validateText($fieldName, $minChars, $maxChars, $errorText) {
-        if (empty(trim($_POST[$fieldName]))) {
+        $text = trim($fieldName);
+        if (empty($text)) {
             return "$errorText";
         }
-        if (!empty(trim($_POST[$fieldName]))) {
+        if (!empty($text)) {
             isCorrectLength($fieldName, $minChars, $maxChars);
         }
     }
@@ -81,15 +82,24 @@
      * @return string warning text or nothing
      */
     function validateImage($fieldName) {
+        $errorMessage = 'Upload a picture in the format png, jpg, jpeg';
+
+        // Не сохраняется и сбрасывается значение загруженного файла и поэтому всегда попадает в этот if
+        // В чем ошибка?
+        if (!isset($_FILES[$fieldName]) || $_FILES[$fieldName]['size'] === 0) {
+            return $errorMessage;
+        }
+
         if (isset($_FILES[$fieldName])) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_name = $_FILES[$fieldName]['tmp_name'];
 
-            $file_type = finfo_file($finfo, $file_name);
+            // get mime content type
+            $mType = mime_content_type($_FILES[$fieldName]);
 
-            if ($file_type !== 'image/jpg' || $file_type !== 'image/jpeg' || $file_type !== 'image/png') {
-                print('Upload a picture in the format png, jpg, jpeg');
+            if ($mType !== 'image/jpg' || $mType !== 'image/jpeg' || $mType !== 'image/png') {
+                finfo_close($_FILES[$fieldName]);
+                return $errorMessage;
             }
+            finfo_close($_FILES[$fieldName]);
           }
     }
 
@@ -102,8 +112,8 @@
      *
      * @return string warning text or nothing
      */
-    function validatePositiveNumber($fieldName, $errorMessage) {
-        if (intval($_POST[$fieldName]) <= 0) {
+    function validateNotNegativeNumber($fieldName, $errorMessage) {
+        if (intval($fieldName) <= 0) {
             return "$errorMessage";
         }
     }
@@ -120,10 +130,10 @@
      */
     function validateDate($fieldName) {
         // convert date to Timestamp
-        $setDate = strtotime($_POST[$fieldName]);
+        $setDate = strtotime($fieldName);
         $currentDate = date('Y-m-d');
         $currentDateTimestamp = strtotime($currentDate);
-        if (empty($_POST[$fieldName])) {
+        if (empty($fieldName)) {
             return "Enter the closing date of the auction";
         }
         if ($setDate <= $currentDateTimestamp) {
