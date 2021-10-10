@@ -5,7 +5,7 @@
     // --- fetch CATEGORIES ---
     function fetchCategories() {
         // SQL query: get all categories
-        $categoriesSqlQuery = 'SELECT name, technical_name FROM categories';
+        $categoriesSqlQuery = 'SELECT id, name, technical_name FROM categories';
 
         // get the categories as array
         $categories = fetchDBData($categoriesSqlQuery);
@@ -13,6 +13,7 @@
         return array_map(
             static function(array $category): array {
                 return [
+                    'id' => $category['id'],
                     'name' => $category['name'],
                     'techName' => $category['technical_name']
                 ];
@@ -132,4 +133,20 @@
             },
             $bits
         );
+    }
+
+    function createNewLot($name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $userId) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        $sqlQuery = "INSERT INTO lots
+        (created_at, name, description, rate_step, start_price, image_url, expiration_at, category_id, author_id)
+        VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        // Prepares an SQL statement for execution
+        $stmt = mysqli_prepare($dbConnection, $sqlQuery);
+        // Binds variables to a prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, 'ssddssii', $name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $userId);
+        // Executes a prepared statement
+        mysqli_stmt_execute($stmt);
     }

@@ -24,7 +24,7 @@
 
                 <div class="lot__image">
                     <img
-                        src="img/<?= htmlspecialchars($lot['imageUrl']) ?>"
+                        src="uploads/<?= htmlspecialchars($lot['imageUrl']) ?>"
                         alt="<?= htmlspecialchars($lot['name']) ?>"
                         width="350"
                         height="260">
