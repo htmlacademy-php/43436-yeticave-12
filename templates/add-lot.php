@@ -11,7 +11,7 @@
             <?php endforeach; ?>
         </ul>
     </nav>
-    <form class="form form--add-lot container form--invalid" action="add.php" method="post" enctype="multipart/form-data">
+    <form class="form form--add-lot container <?=count($errors) > 0 ?? "form--invalid"; ?>" action="add.php" method="post" enctype="multipart/form-data">
         <!-- form--invalid -->
         <h2>Добавление лота</h2>
         <div class="form__container-two">

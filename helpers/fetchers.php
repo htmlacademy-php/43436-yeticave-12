@@ -150,3 +150,22 @@
         // Executes a prepared statement
         mysqli_stmt_execute($stmt);
     }
+
+    function createNewUser($email, $password, $name, $description) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        $sqlQuery = "INSERT INTO users
+        (registered_at, email, password, name, phone)
+        VALUES (NOW(), ?, ?, ?, ?)";
+
+        // hash the password
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        // Prepares an SQL statement for execution
+        $stmt = mysqli_prepare($dbConnection, $sqlQuery);
+        // Binds variables to a prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, 'ssss', $email, $passwordHash, $name, $description);
+        // Executes a prepared statement
+        mysqli_stmt_execute($stmt);
+    }
