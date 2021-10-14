@@ -1,19 +1,8 @@
 <main>
 
-    <nav class="nav">
-        <ul class="nav__list container">
-            <!-- Show lots categories -->
-            <?php foreach ($categories as $category): ?>
-            <li class="nav__item">
-                <a href="pages/all-lots.html">
-                    <?= htmlspecialchars($category['name']) ?>
-                </a>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
+    <?= $categoriesList ?>
 
-    <form class="form container <?=count($errors) > 0 ?? "form--invalid"; ?>" action="sign-up.php" method="post"
+    <form class="form container <?= count($errors) > 0 ? 'form--invalid' : '' ?>" action="sign-up.php" method="post"
         autocomplete="off">
 
         <h2>Регистрация нового аккаунта</h2>

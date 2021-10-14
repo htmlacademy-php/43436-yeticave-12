@@ -23,13 +23,18 @@
         'lots' => $lots
     ]);
 
+    // call data for a categories navigation list
+    $categoriesList = include_template('categories-nav-list.php', [
+        'categories' => $categories
+    ]);
+
     // call data for index.php
     $layout = include_template('layout.php', [
         'title' => 'Main Page',
         'isAuth' => $isAuth,
         'userName' => $userName,
-        'categories' => $categories,
-        'pageContent' => $pageContent
+        'pageContent' => $pageContent,
+        'categoriesList' => $categoriesList
     ]);
 
     // show content of the page

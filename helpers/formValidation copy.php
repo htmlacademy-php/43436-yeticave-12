@@ -14,16 +14,18 @@
     /**
      * Check if the email exists
      *
-     * @param $email: user email
+     * @param $emails: user email
      *
-     * @return array
+     * @return string||null error message or null
      */
     function isEmailExists($email) {
         // get global variable with db connection
         global $dbConnection;
 
         $sqlQuery = "SELECT email FROM users WHERE email ='" . mysqli_real_escape_string($dbConnection, $email) . "';";
+
         $result = mysqli_query($dbConnection, $sqlQuery);
+
         $resultFetched = mysqli_fetch_array($result, MYSQLI_NUM);
 
         return $resultFetched;
@@ -38,7 +40,6 @@
      * @return string||null error message or null
      */
     function validateEmail($fieldName) {
-
         // The FILTER_SANITIZE_EMAIL filter removes all illegal characters from an email address.
         $emailSanitized = filter_var($fieldName, FILTER_SANITIZE_EMAIL);
 
@@ -53,11 +54,18 @@
             return 'Wrong email format';
         }
 
-        //show the error message of the array is not null === email exists
-        if (isEmailExists($emailSanitized) !== null) {
+        $isEmailRepeats = isEmailExists($emailSanitized);
+        // // check if the email exists
+        // $isEmailExistsQuery = "SELECT email FROM users WHERE email ='" . mysqli_real_escape_string($dbConnection, $emailSanitized) . "';";
+
+        // $queryResult = mysqli_query($dbConnection, $isEmailExistsQuery);
+
+        // $resultFetched = mysqli_fetch_array($queryResult, MYSQLI_NUM);
+
+        // show the error message of the array is not null === email exists
+        if ($isEmailRepeats !== null) {
             return 'Email already exists';
         }
-
         // return null if the field doesn't have errors
         return null;
     }
