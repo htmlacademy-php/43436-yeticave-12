@@ -32,11 +32,16 @@
 
     // PAGE STRUCTURE
 
+    // call data for a categories navigation list
+    $categoriesList = include_template('categories-nav-list.php', [
+        'categories' => $categories
+    ]);
+
     // call data for page content
     $pageContent = include_template('lot-template.php', [
-        'categories' => $categories,
         'lot' => $lot,
-        'bits' => $bits
+        'bits' => $bits,
+        'categoriesList' => $categoriesList
     ]);
 
     // call data for index.php
@@ -44,8 +49,8 @@
         'title' => $lot ? $lot['name'] : 'Not found',
         'isAuth' => $isAuth,
         'userName' => $userName,
-        'categories' => $categories,
-        'pageContent' => $pageContent
+        'pageContent' => $pageContent,
+        'categoriesList' => $categoriesList
     ]);
 
     // show content of the page

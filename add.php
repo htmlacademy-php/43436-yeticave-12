@@ -94,10 +94,16 @@
 
     // PAGE STRUCTURE
 
+    // call data for a categories navigation list
+    $categoriesList = include_template('categories-nav-list.php', [
+        'categories' => $categories
+    ]);
+
     // call data for page content
     $pageContent = include_template('add-lot.php', [
         'categories' => $categories,
-        'errors' => $errors
+        'errors' => $errors,
+        'categoriesList' => $categoriesList
     ]);
 
     // call data for index.php
@@ -105,8 +111,8 @@
         'title' => 'Add lot',
         'isAuth' => $isAuth,
         'userName' => $userName,
-        'categories' => $categories,
-        'pageContent' => $pageContent
+        'pageContent' => $pageContent,
+        'categoriesList' => $categoriesList
     ]);
 
     // show content of the page
