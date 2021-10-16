@@ -3,14 +3,10 @@
     require_once('helpers/helpers.php');
     require_once('helpers/formatters.php');
     require_once('helpers/fetchers.php');
+    require_once('helpers/initSession.php');
 
     // setup default timezone
     date_default_timezone_set('Europe/Madrid');
-
-    $isAuth = rand(0, 1);
-
-    $userName = 'Katia Sheleh';
-
 
     $lotId = $_GET['id'];
 
@@ -41,7 +37,8 @@
     $pageContent = include_template('lot-template.php', [
         'lot' => $lot,
         'bits' => $bits,
-        'categoriesList' => $categoriesList
+        'categoriesList' => $categoriesList,
+        'isAuth' => $isAuth,
     ]);
 
     // call data for index.php

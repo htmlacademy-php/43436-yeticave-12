@@ -169,3 +169,38 @@
         // Executes a prepared statement
         mysqli_stmt_execute($stmt);
     }
+
+
+    /**
+     * Fetch single user information by Email
+     *
+     * @param $email: user email
+     *
+     * @return array
+     */
+    function fetchSingleUser($email) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        $sqlQuery = "SELECT id, email, password, name FROM users WHERE email ='" . mysqli_real_escape_string($dbConnection, $email) . "';";
+
+         // get the result as array
+        $resultFetched = fetchDBData($sqlQuery);
+
+        if(count($resultFetched) > 0) {
+
+            // get data for single user
+            $resultFetched = $resultFetched[0];
+
+            return [
+                'id' => $resultFetched['id'],
+                'email' => $resultFetched['email'],
+                'password' => $resultFetched['password'],
+                'name' => $resultFetched['name'],
+            ];
+        }
+
+        // return empty array if the user doesn't exist
+        return $resultFetched;
+
+    }

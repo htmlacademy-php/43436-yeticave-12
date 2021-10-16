@@ -3,13 +3,10 @@
     require_once('helpers/helpers.php');
     require_once('helpers/formatters.php');
     require_once('helpers/fetchers.php');
+    require_once('helpers/initSession.php');
 
     // setup default timezone
     date_default_timezone_set('Europe/Madrid');
-
-    $isAuth = rand(0, 1);
-
-    $userName = 'Katia Sheleh';
 
     $categories = fetchCategories(); // src => helpers/fetchers.php
     $lots = fetchLots(); // src => helpers/fetchers.php

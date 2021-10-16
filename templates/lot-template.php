@@ -30,6 +30,7 @@
 
             </div>
             <div class="lot-item__right">
+            <?php if ($isAuth === true) : ?>
                 <div class="lot-item__state">
 
                     <!-- get remaining time for the item -->
@@ -66,7 +67,7 @@
                     <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
-
+                <?php endif ?>
                 <div class="history">
                     <h3>История ставок (<span><?= htmlspecialchars(count($bits)) ?></span>)</h3>
                     <table class="history__list">
