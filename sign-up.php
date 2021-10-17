@@ -12,8 +12,7 @@
 
     if ($isAuth === true) {
         header('HTTP/1.0 403 Forbidden');
-        echo '<h3>You are already registered</h3>';
-        echo '<a href = "index.php">Go home</a>';
+        require_once('authed.php');
         exit();
     }
 

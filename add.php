@@ -12,8 +12,7 @@
 
     if ($isAuth === false) {
         header('HTTP/1.0 403 Forbidden');
-        echo '<h3>Please authorize in the system</h3>';
-        echo '<a href = "sign-up.php">Sign-up</a> <br/> <a href = "login.php">Login</a>';
+        require_once('auth-needed.php');
         exit();
     }
 

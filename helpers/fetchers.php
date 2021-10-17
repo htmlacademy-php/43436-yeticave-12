@@ -201,6 +201,6 @@
         }
 
         // return empty array if the user doesn't exist
-        return $resultFetched;
+        return [];
 
     }

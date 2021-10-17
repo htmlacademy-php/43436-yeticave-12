@@ -35,7 +35,7 @@
         }
 
         //show the error message of the array is not null === email exists
-        if (count(fetchSingleUser($emailSanitized)) > 0) {
+        if ([] !== fetchSingleUser($emailSanitized)) {
             return 'Email already exists';
         }
 
@@ -52,13 +52,22 @@
      * @return string||null error message or null
      */
     function verifyEmail($fieldName) {
+        // The FILTER_SANITIZE_EMAIL filter removes all illegal characters from an email address.
+        $emailSanitized = filter_var($fieldName, FILTER_SANITIZE_EMAIL);
+
         // show error message if the field is empty
-        if (empty($fieldName)) {
+        if (empty($emailSanitized)) {
             return "Enter your E-mail address";
         }
 
+        // The filter_var() function filters a variable with the specified filter.
+        // The FILTER_VALIDATE_EMAIL filter validates an e-mail address.
+        if (!filter_var($emailSanitized, FILTER_VALIDATE_EMAIL)) {
+            return 'Wrong email format';
+        }
+
         //show the error message if the email doesn't exist
-        if (count(fetchSingleUser($fieldName)) === 0) {
+        if ([] === fetchSingleUser($emailSanitized)) {
             return 'The user is not found';
         }
 
@@ -82,15 +91,18 @@
             return "Password can't be empty";
         }
 
-        // if user exists
-        if (count(fetchSingleUser($email)) > 0) {
-            // get user password
-            $userDBPassword = fetchSingleUser($email)['password'];
+        // if user doesn't exists
+        if ([] === fetchSingleUser($email)) {
+            return "User does not exist.";
+        }
 
-            // compare entered password with the user password (from DB)
-            if (!password_verify($password, $userDBPassword)) {
-                return "Wrong password";
-            }
+        // if user exists
+        // get user password
+        $userDBPassword = fetchSingleUser($email)['password'];
+
+        // compare entered password with the user password (from DB)
+        if (!password_verify($password, $userDBPassword)) {
+            return "Wrong password";
         }
 
         return null;
