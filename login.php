@@ -10,36 +10,23 @@
     require_once('helpers/formValidation.php');
     require_once('helpers/initSession.php');
 
-    if ($isAuth === true) {
-        header('HTTP/1.0 403 Forbidden');
-        require_once('authed.php');
-        exit();
-    }
-
     // setup default timezone
     date_default_timezone_set('Europe/Madrid');
 
     $categories = fetchCategories(); // src => helpers/fetchers.php
 
-    $requiredFields = ['email', 'password', 'name', 'message'];
+    $requiredFields = ['email', 'password'];
 
     $errors = [];
 
     $rules = [
         'email' => function () {
-            return validateEmail($_POST['email']);
+            return verifyEmail($_POST['email']);
         },
         'password' => function () {
-            return validateText($_POST['password'], 5, 15, 'Write your password');
-        },
-        'name' => function () {
-            return validateText($_POST['name'], 5, 25, 'Write your name.');
-        },
-        'message' => function () {
-            return validateText($_POST['message'], 10, 100, 'Write down how to contact you');
+            return verifyPassword($_POST['password'], $_POST['email']);
         },
     ];
-
 
     // check errors in all fields ($_POST)
     foreach ($_POST as $key => $value) {
@@ -49,26 +36,19 @@
         }
     }
 
-
     // clean entries with value NULL
     $errors = array_filter($errors);
 
     // actions after form submitting
     if($_SERVER['REQUEST_METHOD'] === 'POST' && count($errors) === 0) {
         $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
-        $name = trim($_POST['name']);
-        $description = trim($_POST['message']);
 
-
-        createNewUser($email, $password, $name, $description);
-
-        // empty errors
-        $errors = [];
+        // setup session
+        $_SESSION['userEmail'] = $email;
 
         // TODO remove 43436-yeticave-12 directory
-        // redirect to a page with the lot information
-        header("Location:/43436-yeticave-12/login.php");
+        // redirect to the main page
+        header("Location:/43436-yeticave-12/index.php");
 
     }
 
@@ -80,7 +60,7 @@
     ]);
 
     // call data for page content
-    $pageContent = include_template('sign-up-template.php', [
+    $pageContent = include_template('login-template.php', [
         'categories' => $categories,
         'errors' => $errors,
         'categoriesList' => $categoriesList
@@ -88,7 +68,7 @@
 
     // call data for index.php
     $layout = include_template('layout.php', [
-        'title' => 'Registration',
+        'title' => 'Login',
         'isAuth' => $isAuth,
         'userName' => $userName,
         'pageContent' => $pageContent,

@@ -12,25 +12,6 @@
 
 
     /**
-     * Check if the email exists
-     *
-     * @param $email: user email
-     *
-     * @return array
-     */
-    function isEmailExists($email) {
-        // get global variable with db connection
-        global $dbConnection;
-
-        $sqlQuery = "SELECT email FROM users WHERE email ='" . mysqli_real_escape_string($dbConnection, $email) . "';";
-        $result = mysqli_query($dbConnection, $sqlQuery);
-        $resultFetched = mysqli_fetch_array($result, MYSQLI_NUM);
-
-        return $resultFetched;
-    }
-
-
-    /**
      * Validate email field
      *
      * @param $fieldName: field name
@@ -54,11 +35,76 @@
         }
 
         //show the error message of the array is not null === email exists
-        if (isEmailExists($emailSanitized) !== null) {
+        if ([] !== fetchSingleUser($emailSanitized)) {
             return 'Email already exists';
         }
 
         // return null if the field doesn't have errors
+        return null;
+    }
+
+
+    /**
+     * verify email
+     *
+     * @param $fieldName: field name
+     *
+     * @return string||null error message or null
+     */
+    function verifyEmail($fieldName) {
+        // The FILTER_SANITIZE_EMAIL filter removes all illegal characters from an email address.
+        $emailSanitized = filter_var($fieldName, FILTER_SANITIZE_EMAIL);
+
+        // show error message if the field is empty
+        if (empty($emailSanitized)) {
+            return "Enter your E-mail address";
+        }
+
+        // The filter_var() function filters a variable with the specified filter.
+        // The FILTER_VALIDATE_EMAIL filter validates an e-mail address.
+        if (!filter_var($emailSanitized, FILTER_VALIDATE_EMAIL)) {
+            return 'Wrong email format';
+        }
+
+        //show the error message if the email doesn't exist
+        if ([] === fetchSingleUser($emailSanitized)) {
+            return 'The user is not found';
+        }
+
+        return null;
+    }
+
+
+    /**
+     * verify password
+     *
+     * @param $password: password field
+     * @param $email: user email field
+     *
+     * @return string||null error message or null
+     */
+    function verifyPassword($password, $email) {
+        $userDBPassword = '';
+
+        // show error message if the field is empty
+        if (empty($password)) {
+            return "Password can't be empty";
+        }
+
+        // if user doesn't exists
+        if ([] === fetchSingleUser($email)) {
+            return "User does not exist.";
+        }
+
+        // if user exists
+        // get user password
+        $userDBPassword = fetchSingleUser($email)['password'];
+
+        // compare entered password with the user password (from DB)
+        if (!password_verify($password, $userDBPassword)) {
+            return "Wrong password";
+        }
+
         return null;
     }
 

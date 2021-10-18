@@ -8,13 +8,16 @@
     require_once('helpers/formatters.php');
     require_once('helpers/fetchers.php');
     require_once('helpers/formValidation.php');
+    require_once('helpers/initSession.php');
+
+    if ($isAuth === false) {
+        header('HTTP/1.0 403 Forbidden');
+        require_once('auth-needed.php');
+        exit();
+    }
 
     // setup default timezone
     date_default_timezone_set('Europe/Madrid');
-
-    $isAuth = rand(0, 1);
-
-    $userName = 'Katia Sheleh';
 
     $categories = fetchCategories(); // src => helpers/fetchers.php
 
@@ -28,7 +31,7 @@
             return validateFilled($_POST['category'], 'Select a category');
         },
         'message' => function () {
-            return validateText($_POST['message'], 20, 300, 'Enter the lot description');
+            return validateText($_POST['message'], 20, 30000, 'Enter the lot description');
         },
         'lot-img' => function () {
             return validateImage('lot-img', __DIR__ . '/uploads/');
@@ -77,8 +80,9 @@
         $imageUrl = $_FILES['lot-img']['name'];
         $expirationDate = $_POST['lot-date'];
         $categoryId = $_POST['category'];
+        $author = $userId; // get $userId from helpers/initSession.php
 
-        createNewLot($name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, '1');
+        createNewLot($name, $description, $rateStep, $startPrice, $imageUrl, $expirationDate, $categoryId, $author);
 
         // empty errors
         $errors = [];

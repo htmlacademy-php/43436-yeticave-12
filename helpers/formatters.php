@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Format price
  *
@@ -58,13 +59,4 @@ function calculateRemainingTime($dateTo) {
         'hours' => $remainingHours,
         'minutes' => $remainingMinutes
     ];
-}
-
-
-/**
- * Show 404 error
- */
-function show404() {
-    header('404', true, 404);
-    die();
 }

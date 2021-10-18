@@ -3,27 +3,27 @@
     require_once('helpers/helpers.php');
     require_once('helpers/formatters.php');
     require_once('helpers/fetchers.php');
+    require_once('helpers/initSession.php');
 
     // setup default timezone
     date_default_timezone_set('Europe/Madrid');
-
-    $isAuth = rand(0, 1);
-
-    $userName = 'Katia Sheleh';
-
 
     $lotId = $_GET['id'];
 
     // show 404 error if id is empty
     if (!isset($lotId)) {
-        show404();
+        header('HTTP/1.0 404 Not Found');
+        require_once('./404.php');
+        exit();
     }
 
     $lot = fetchLot($lotId); // src => helpers/fetchers.php
 
     // show 404 error if lot doesn't exist
     if (empty($lot) === true) {
-        show404();
+        header('HTTP/1.0 404 Not Found');
+        require_once('./404.php');
+        exit();
     }
 
     $bits = fetchBits($lotId); // src => helpers/fetchers.php
@@ -41,7 +41,8 @@
     $pageContent = include_template('lot-template.php', [
         'lot' => $lot,
         'bits' => $bits,
-        'categoriesList' => $categoriesList
+        'categoriesList' => $categoriesList,
+        'isAuth' => $isAuth,
     ]);
 
     // call data for index.php
