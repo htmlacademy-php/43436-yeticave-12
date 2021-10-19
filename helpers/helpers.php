@@ -144,3 +144,16 @@ function include_template($name, array $data = []) {
 }
 
 
+/**
+ * Generate url for pagination
+ *
+ * @param $pageNumber : number of active page
+ *
+ * @return string : back updated url
+ */
+function updatePageNumber($pageNumber) {
+    $_GET['page'] = $pageNumber;
+    return $_SERVER['SCRIPT_NAME'] . '?' . http_build_query($_GET);
+}
+
+
