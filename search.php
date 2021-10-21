@@ -25,7 +25,7 @@
         $preparedStringForSearch = prepareStringForSearch($searchString);
 
         $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
-        $lotsPerPage = 3;
+        $lotsPerPage = 9;
 
         $lotsResultTotal = countSearchResult($preparedStringForSearch);
         $pagesTotal = ceil($lotsResultTotal / $lotsPerPage);

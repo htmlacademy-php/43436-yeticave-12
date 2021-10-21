@@ -51,8 +51,8 @@
                     <?php endforeach; ?>
 
                 </ul>
-
-                <?php if ($pagesTotal > 0) : ?>
+                <!-- show pagination only if we have more than 1 page -->
+                <?php if ($pagesTotal > 1) : ?>
                 <ul class="pagination-list">
                     <li class="pagination-item pagination-item-prev">
                         <a
@@ -71,9 +71,9 @@
                             href="<?= htmlspecialchars(updatePageNumber($currentPage < $pagesTotal ? $currentPage + 1 : $pagesTotal)) ?>">Next</a>
                     </li>
                 </ul>
-                <!-- $pagesTotal > 0 -->
+
                 <?php endif ?>
-                <!-- count($searchResult) === 0 -->
+
             <?php endif ?>
         </section>
 

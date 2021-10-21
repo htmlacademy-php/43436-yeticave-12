@@ -218,11 +218,13 @@
         $searchResultArray = explode(' ', $searchString);
         $readyStringForSearch = '';
 
-        foreach ($searchResultArray as $item) {
-            // add placeholder in the end of every word in the search and save it as string
-            $readyStringForSearch = $readyStringForSearch . $item . '* ';
+        foreach ($searchResultArray as $searchItem) {
+            // check if $item is not empty space
+            if(strlen($searchItem) > 0) {
+                // add placeholder in the end of every word in the search and save it as string
+                $readyStringForSearch = trim($readyStringForSearch) . trim($searchItem) . '* ';
+            }
         }
-
         return trim($readyStringForSearch);
     }
 
