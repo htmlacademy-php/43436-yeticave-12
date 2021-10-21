@@ -53,3 +53,7 @@ CREATE TABLE rates(
     FOREIGN KEY (`lot_id`) REFERENCES `lots`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- create fulltext search for lots
+CREATE FULLTEXT INDEX lot_ft_search ON lots(name, description);
+
+-- SELECT * FROM lots WHERE MATCH(name,description) AGAINST('Маска Oakley');

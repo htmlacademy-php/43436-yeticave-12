@@ -204,3 +204,91 @@
         return [];
 
     }
+
+
+    /**
+     * Prepare string for search
+     *
+     * @param $searchString: init string
+     *
+     * @return string
+     */
+    function prepareStringForSearch($searchString) {
+        // convert string to array
+        $searchResultArray = explode(' ', $searchString);
+        $readyStringForSearch = '';
+
+        foreach ($searchResultArray as $searchItem) {
+            // check if $item is not empty space
+            if(strlen($searchItem) > 0) {
+                // add placeholder in the end of every word in the search and save it as string
+                $readyStringForSearch = trim($readyStringForSearch) . trim($searchItem) . '* ';
+            }
+        }
+        return trim($readyStringForSearch);
+    }
+
+
+    /**
+     * Get total number of found lots
+     *
+     * @param $searchString: init string
+     *
+     * @return int : count of found lots
+     */
+    function countSearchResult($searchString) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        $sql_lotsTotal = "SELECT COUNT(*) as lotsTotal FROM lots l WHERE expiration_at > NOW() AND MATCH(l.name, l.description) AGAINST('" . mysqli_real_escape_string(
+            $dbConnection,
+            $searchString
+        ) .
+            "' IN BOOLEAN MODE);";
+        $sql_lots_count_query = mysqli_query($dbConnection, $sql_lotsTotal);
+
+        $lotsTotal = mysqli_fetch_assoc($sql_lots_count_query)['lotsTotal'];
+
+        return $lotsTotal;
+    }
+
+
+    /**
+     * Get lots with limit per page
+     *
+     * @param $searchString: init string
+     *
+     * @return array : found lots
+     */
+    function fetchSearchedLots($searchString, $lotsPerPage, $offset) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        // SQL query: get the newest, open lots.
+        // Result includes title, starting price, image link, expiration date, category name. show maximum 6 lots
+        $lotsSqlQuery = "SELECT l.id, l.name, start_price, image_url, c.name as category_name, l.expiration_at
+        FROM lots l
+        INNER JOIN categories c ON category_id = c.id
+        WHERE expiration_at > NOW() AND MATCH(l.name, l.description) AGAINST('" . mysqli_real_escape_string(
+        $dbConnection,
+        $searchString
+        ) .
+        "' IN BOOLEAN MODE) ORDER BY id DESC LIMIT " . $lotsPerPage . " OFFSET " . $offset . ";";
+
+        // get the categories as array
+        $lots = fetchDBData($lotsSqlQuery);
+
+        return array_map(
+            static function(array $lot): array {
+                return [
+                    'id' => $lot['id'],
+                    'name' => $lot['name'],
+                    'startPrice' => $lot['start_price'],
+                    'imageUrl' => $lot['image_url'],
+                    'category' => $lot['category_name'],
+                    'expirationDate' => $lot['expiration_at']
+                ];
+            },
+            $lots
+        );
+    }
