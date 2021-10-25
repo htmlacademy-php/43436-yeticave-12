@@ -1,25 +1,13 @@
-<main class="container">
-    <section class="promo">
-        <h2 class="promo__title">Нужен стафф для катки?</h2>
-        <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
-        <ul class="promo__list">
-            <!-- Show lots categories -->
-            <?php foreach ($categories as $category): ?>
-                <li class="promo__item promo__item--<?= htmlspecialchars($category['techName']) ?>">
-                    <a class="promo__link" href="lots.php?category=<?= htmlspecialchars($category['techName']) ?>">
-                        <?= htmlspecialchars($category['name']) ?>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </section>
-    <section class="lots">
-        <div class="lots__header">
-            <h2>Открытые лоты</h2>
-        </div>
+<main>
+    <?= $categoriesList ?>
+
+    <div class="container">
+
+      <section class="lots">
+        <h2>Все лоты в категории <span>«<?= htmlspecialchars($currentCategoryData['name']) ?>»</span></h2>
         <ul class="lots__list">
-            <!-- Lots list -->
-            <?php foreach ($lots as $lot): ?>
+          <!-- Lots list -->
+          <?php foreach ($lots as $lot): ?>
             <li class="lots__item lot">
 
                 <div class="lot__image">
@@ -62,5 +50,30 @@
             </li>
             <?php endforeach; ?>
         </ul>
-    </section>
-</main>
+      </section>
+
+
+      <!-- show pagination only if we have more than 1 page -->
+      <?php if ($pagesTotal > 1) : ?>
+                <ul class="pagination-list">
+                    <li class="pagination-item pagination-item-prev">
+                        <a
+                            href="<?= htmlspecialchars(updatePageNumber($currentPage > 1 ? $currentPage - 1 : 1)) ?>">Prev</a>
+                    </li>
+
+                    <?php foreach ($pages as $page) { ?>
+                    <li
+                        class="pagination-item <?= intval($page) === intval($currentPage) ? 'pagination-item-active' : '' ?>">
+                        <a href="<?= htmlspecialchars(updatePageNumber($page)) ?>"><?= $page ?></a>
+                    </li>
+                    <?php } ?>
+
+                    <li class="pagination-item pagination-item-next">
+                        <a
+                            href="<?= htmlspecialchars(updatePageNumber($currentPage < $pagesTotal ? $currentPage + 1 : $pagesTotal)) ?>">Next</a>
+                    </li>
+                </ul>
+
+                <?php endif ?>
+    </div>
+  </main>

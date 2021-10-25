@@ -292,3 +292,87 @@
             $lots
         );
     }
+
+
+    /**
+     * Get total number of found lots
+     *
+     * @param $category: category technical name
+     *
+     * @return int : count of found lots
+     */
+    function countLotsInCategory($category) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        $sql_lotsTotal = "SELECT COUNT(*) as lotsTotal
+        FROM lots l
+        INNER JOIN categories c ON category_id = c.id
+        WHERE technical_name = '" . mysqli_real_escape_string($dbConnection, $category) . "' AND expiration_at > NOW()";
+
+        $sql_lots_count_query = mysqli_query($dbConnection, $sql_lotsTotal);
+
+        $lotsTotal = mysqli_fetch_assoc($sql_lots_count_query)['lotsTotal'];
+
+        return $lotsTotal;
+    }
+
+
+    // --- fetch all lots for specific category ---
+    function fetchLotsInCategory($category, $lotsPerPage, $offset) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        // SQL query: get the newest, open lots.
+        // Result includes title, starting price, image link, expiration date, category name. show maximum 6 lots
+        $lotsSqlQuery = "SELECT l.id, l.name, start_price, image_url, c.name as category_name, l.expiration_at
+        FROM lots l
+        INNER JOIN categories c ON category_id = c.id
+        WHERE expiration_at > NOW() AND technical_name = '" . mysqli_real_escape_string($dbConnection, $category) . "'
+        ORDER BY created_at DESC LIMIT " . $lotsPerPage . " OFFSET " . $offset . ";";
+
+        // get the categories as array
+        $lots = fetchDBData($lotsSqlQuery);
+
+        return array_map(
+            static function(array $lot): array {
+                return [
+                    'id' => $lot['id'],
+                    'name' => $lot['name'],
+                    'startPrice' => $lot['start_price'],
+                    'imageUrl' => $lot['image_url'],
+                    'category' => $lot['category_name'],
+                    'expirationDate' => $lot['expiration_at']
+                ];
+            },
+            $lots
+        );
+    }
+
+
+    // --- fetch Category ---
+    function fetchCategory($category) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        // SQL query: get all categories
+        $categoriesSqlQuery = "SELECT id, name, technical_name
+        FROM categories
+        WHERE technical_name = '" . mysqli_real_escape_string($dbConnection, $category) . "'";
+
+        // get the categories as array
+        $categories = fetchDBData($categoriesSqlQuery);
+
+        if (count($categories) === 0) {
+            return [];
+        }
+
+        // get data for single category
+        $category = $categories[0];
+
+        return [
+            'id' => $category['id'],
+            'name' => $category['name'],
+            'techName' => $category['technical_name']
+        ];
+    }
