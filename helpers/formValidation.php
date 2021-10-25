@@ -219,4 +219,23 @@
         return null;
     }
 
+    /**
+     * Validate bet value
+     *
+     * @param $fieldName: field name
+     * @param $minBitValue: value of min bet for the lots
+     *
+     * @return string||null error message or null
+     */
+    function validateBetValue($fieldName, $minBitValue) {
+        if (empty($fieldName)) {
+            return 'Enter the bet';
+        }
+
+        if ($fieldName < $minBitValue) {
+            return 'Min. bet must be ' . formatPrice($minBitValue);
+        }
+
+    }
+
 

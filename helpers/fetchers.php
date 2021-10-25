@@ -91,7 +91,7 @@
         return [
             'name' => $lot['name'],
             'description' => $lot['description'],
-            'bitStep' => $lot['rate_step'],
+            'betStep' => $lot['rate_step'],
             'startPrice' => $lot['start_price'],
             'imageUrl' => $lot['image_url'],
             'category' => $lot['category_name'],
@@ -100,7 +100,7 @@
     }
 
      // --- fetch all bits for specific LOT ---
-    function fetchBits($lotId) {
+    function fetchBets($lotId) {
         // get global variable with db connection
         global $dbConnection;
 
@@ -375,4 +375,53 @@
             'name' => $category['name'],
             'techName' => $category['technical_name']
         ];
+    }
+
+
+    function createNewBet($userId, $lotId, $betValue) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        $sqlQuery = "INSERT INTO rates (created_at, user_id, lot_id, price) VALUES (NOW(), ?, ?, ?)";
+
+        // Prepares an SQL statement for execution
+        $stmt = mysqli_prepare($dbConnection, $sqlQuery);
+        // Binds variables to a prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, 'iid', $userId, $lotId, $betValue);
+        // Executes a prepared statement
+        mysqli_stmt_execute($stmt);
+    }
+
+
+    // --- fetch LOTS ---
+    function fetchMyBets($authorId) {
+        // get global variable with db connection
+        global $dbConnection;
+        // SQL query: get the newest, open lots.
+        // Result includes title, starting price, image link, expiration date, category name. show maximum 6 lots
+        $lotsSqlQuery = "SELECT l.id as lot_id, l.image_url, l.name as lot_name, c.name as category_name, l.expiration_at, r.price as bet_value, r.id as bet_id, r.created_at as bet_created
+        FROM lots l
+        INNER JOIN categories c ON category_id = c.id
+        INNER JOIN rates r ON r.lot_id = l.id
+        WHERE r.user_id = '" . mysqli_real_escape_string($dbConnection, $authorId) . "'
+        ORDER BY l.created_at DESC";
+
+        // get the categories as array
+        $bets = fetchDBData($lotsSqlQuery);
+
+        return array_map(
+            static function(array $bet): array {
+                return [
+                    'id' => $bet['bet_id'],
+                    'lotId' => $bet['lot_id'],
+                    'name' => $bet['lot_name'],
+                    'betValue' => $bet['bet_value'],
+                    'betCreated' => $bet['bet_created'],
+                    'imageUrl' => $bet['image_url'],
+                    'category' => $bet['category_name'],
+                    'expirationDate' => $bet['expiration_at']
+                ];
+            },
+            $bets
+        );
     }
