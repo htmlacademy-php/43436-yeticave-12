@@ -30,6 +30,10 @@
         // fetch result
         $maxBets = fetchDBData($sqlQuery);
 
+        if (count($maxBets) === 0) {
+            return [];
+        }
+
         //get data for single lot
         $bet = $maxBets[0];
 
@@ -60,7 +64,7 @@
         $lotId = $lot['id'];
         $bet = getMaxBetValueForLot($lotId);
 
-        if (!is_null($bet['authorId'])) {
+        if (count($bet) > 0 && !is_null($bet['authorId'])) {
             setLotWinner($lotId, $bet['authorId'], $bet['maxPrice']);
         }
     }

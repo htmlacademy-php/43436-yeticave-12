@@ -38,6 +38,22 @@ function getQueryResult($sqlQuery) {
     return $result;
 }
 
+
+/**
+ * Execute sql query
+ *
+ * @param $sqlQuery: string with SQL query
+ *
+ * @return object mysqli_query() performs a query against a database
+ */
+function executeQuery($sqlQuery) {
+    // get global variable with db connection
+    global $dbConnection;
+
+    // execute sql
+    return mysqli_query($dbConnection, $sqlQuery);
+}
+
 /**
  * Fetch all result rows as an associative array, a numeric array, or both
  *

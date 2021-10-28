@@ -448,10 +448,9 @@
         global $dbConnection;
 
         // SQL query: get all categories
-        $sqlQuery = "UPDATE lots SET start_price = '". mysqli_real_escape_string($dbConnection, $newPrice) ."' WHERE id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "'";
+        $sqlQuery = "UPDATE lots SET start_price = '". mysqli_real_escape_string($dbConnection, $newPrice) ."', rate_step = '". mysqli_real_escape_string($dbConnection, $newPrice) ."' WHERE id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "'";
 
-        // fetch result
-        return fetchDBData($sqlQuery);
+        executeQuery($sqlQuery);
     }
 
 
@@ -460,10 +459,14 @@
         global $dbConnection;
 
         // SQL query: get all categories
-        $sqlQuery = "SELECT user_id, price FROM rates WHERE lot_id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "' ORDER BY user_id DESC LIMIT 1";
+        $sqlQuery = "SELECT user_id, price FROM rates WHERE lot_id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "' ORDER BY created_at DESC LIMIT 1";
 
         // fetch result
         $maxBets = fetchDBData($sqlQuery);
+
+        if (count($maxBets) === 0) {
+            return [];
+        }
 
         //get data for single lot
         $bet = $maxBets[0];
@@ -473,8 +476,3 @@
             'maxPrice' => $bet['price']
         ];
     }
-
-
-
-
-

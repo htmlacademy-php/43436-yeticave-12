@@ -55,8 +55,12 @@
                             </span>
                         </div>
                     </div>
-                    <?php if ($isAuth === true && ($remainingTime['hours'] > 1 && $remainingTime['minutes'] > 1) &&
-                    intval($lot['authorId'] !== intval($userId)) && !$betMadeByCurrentUser) : ?>
+
+
+                    <?php if ($isAuth === true &&
+                    ($remainingTime['hours'] > 1 && $remainingTime['minutes'] > 1) &&
+                    intval($lot['authorId']) !== intval($userId) &&
+                    !$betMadeByCurrentUser) : ?>
 
 
                     <form class="lot-item__form" action="lot.php?id=<?= $_GET['id'] ?>" method="post"

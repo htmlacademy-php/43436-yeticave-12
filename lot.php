@@ -33,6 +33,8 @@
     $errors = [];
     $requiredFields = ['betStep'];
 
+    $betMadeByCurrentUser = false;
+
     $rules = [
         'betStep' => function ($lot) {
             return validateBetValue($_POST['betStep'], $lot['betStep']);
@@ -65,8 +67,13 @@
 
     }
 
-    $lastBet = getLastBet($lotId);
-    $betMadeByCurrentUser = (intval($lastBet['authorId']) === intval($userId));
+    if($isAuth === true) {
+        $lastBet = getLastBet($lotId);
+        $betMadeByCurrentUser = count($lastBet) > 0 ? intval($lastBet['authorId']) === intval($userId) : '';
+    }
+
+    $currentUserId = $isAuth === true ? $userId : '';
+
 
     // PAGE STRUCTURE
 
@@ -82,7 +89,7 @@
         'categoriesList' => $categoriesList,
         'isAuth' => $isAuth,
         'errors' => $errors,
-        'userId' => $userId,
+        'userId' => $currentUserId,
         'betMadeByCurrentUser' => $betMadeByCurrentUser
     ]);
 
