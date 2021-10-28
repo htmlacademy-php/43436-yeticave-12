@@ -17,7 +17,8 @@
 
 
     // get data for current category
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' ) {
+    if (in_array($_SERVER['REQUEST_METHOD'],array('GET','POST','DELETE'))) {
+
         $currentCatTechName = isset($_GET['category']) ? $_GET['category'] : '';
         $currentCategoryData = fetchCategory($currentCatTechName);
 

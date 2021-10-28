@@ -227,13 +227,17 @@
      *
      * @return string||null error message or null
      */
-    function validateBetValue($fieldName, $minBitValue) {
+    function validateBetValue($fieldName, $minBetValue) {
         if (empty($fieldName)) {
-            return 'Enter the bet';
+            return 'Enter the bet value';
         }
 
-        if ($fieldName < $minBitValue) {
-            return 'Min. bet must be ' . formatPrice($minBitValue);
+        if(is_numeric($fieldName) === false) {
+            return 'Only numerical values allowed';
+        }
+
+        if ($fieldName < $minBetValue) {
+            return 'Min. bet must be ' . formatPrice($minBetValue);
         }
 
     }

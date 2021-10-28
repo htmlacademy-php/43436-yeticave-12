@@ -9,6 +9,7 @@
     require_once('helpers/fetchers.php');
     require_once('helpers/formValidation.php');
     require_once('helpers/initSession.php');
+    require_once('helpers/setWinners.php');
 
     // setup default timezone
     date_default_timezone_set('Europe/Madrid');

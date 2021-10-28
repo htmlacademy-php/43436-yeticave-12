@@ -20,7 +20,6 @@
 
     $lot = fetchLot($lotId); // src => helpers/fetchers.php
 
-
     // show 404 error if lot doesn't exist
     if (empty($lot) === true) {
         header('HTTP/1.0 404 Not Found');
@@ -35,8 +34,7 @@
     $requiredFields = ['betStep'];
 
     $rules = [
-        'betStep' => function () {
-            global $lot;
+        'betStep' => function ($lot) {
             return validateBetValue($_POST['betStep'], $lot['betStep']);
         },
     ];
@@ -45,7 +43,7 @@
     foreach ($_POST as $key => $value) {
         if (isset($rules[$key])) {
             $rule = $rules[$key];
-            $errors[$key] = $rule();
+            $errors[$key] = $rule($lot);
         }
     }
 
@@ -54,14 +52,21 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($errors) === 0) {
         $betValue = $_POST['betStep'];
+        $currentPrice = $lot['startPrice'];
+        $newPrice = $currentPrice + $betValue;
 
-        createNewBet($userId, $lotId, $betValue);
+        createNewBet($userId, $lotId, $newPrice);
+
+        updateLotPrice($lotId, $newPrice);
 
         // TODO remove 43436-yeticave-12 directory
         // redirect to a page with the lot information
         header("Location:/43436-yeticave-12/lot.php?&id=$lotId");
+
     }
 
+    $lastBet = getLastBet($lotId);
+    $betMadeByCurrentUser = (intval($lastBet['authorId']) === intval($userId));
 
     // PAGE STRUCTURE
 
@@ -76,7 +81,9 @@
         'bets' => $bets,
         'categoriesList' => $categoriesList,
         'isAuth' => $isAuth,
-        'errors' => $errors
+        'errors' => $errors,
+        'userId' => $userId,
+        'betMadeByCurrentUser' => $betMadeByCurrentUser
     ]);
 
     // call data for index.php

@@ -58,7 +58,8 @@
 
         // SQL query: get lot information
         $lotSqlQuery = "SELECT
-            l.id,
+            l.id as lot_id,
+            l.author_id,
             l.name,
             l.description,
             l.rate_step,
@@ -89,13 +90,15 @@
         $lot = $lots[0];
 
         return [
+            'id' => $lot['lot_id'],
             'name' => $lot['name'],
             'description' => $lot['description'],
             'betStep' => $lot['rate_step'],
             'startPrice' => $lot['start_price'],
             'imageUrl' => $lot['image_url'],
             'category' => $lot['category_name'],
-            'expirationDate' => $lot['expiration_at']
+            'expirationDate' => $lot['expiration_at'],
+            'authorId' => $lot['author_id']
         ];
     }
 
@@ -399,12 +402,23 @@
         global $dbConnection;
         // SQL query: get the newest, open lots.
         // Result includes title, starting price, image link, expiration date, category name. show maximum 6 lots
-        $lotsSqlQuery = "SELECT l.id as lot_id, l.image_url, l.name as lot_name, c.name as category_name, l.expiration_at, r.price as bet_value, r.id as bet_id, r.created_at as bet_created
-        FROM lots l
-        INNER JOIN categories c ON category_id = c.id
-        INNER JOIN rates r ON r.lot_id = l.id
-        WHERE r.user_id = '" . mysqli_real_escape_string($dbConnection, $authorId) . "'
-        ORDER BY l.created_at DESC";
+        $lotsSqlQuery = "SELECT
+            l.id as lot_id,
+            l.image_url,
+            l.name as lot_name,
+            c.name as category_name,
+            l.expiration_at,
+            r.price as bet_value,
+            r.id as bet_id,
+            r.created_at as bet_created,
+            r.is_winner,
+            u.phone
+            FROM lots l
+            INNER JOIN categories c ON category_id = c.id
+            INNER JOIN rates r ON r.lot_id = l.id
+            INNER JOIN users u ON r.user_id = u.id
+            WHERE r.user_id = '" . mysqli_real_escape_string($dbConnection, $authorId) . "'
+            ORDER BY l.created_at DESC";
 
         // get the categories as array
         $bets = fetchDBData($lotsSqlQuery);
@@ -419,9 +433,48 @@
                     'betCreated' => $bet['bet_created'],
                     'imageUrl' => $bet['image_url'],
                     'category' => $bet['category_name'],
-                    'expirationDate' => $bet['expiration_at']
+                    'expirationDate' => $bet['expiration_at'],
+                    'isWinner' => $bet['is_winner'],
+                    'winnerContact' => $bet['phone']
                 ];
             },
             $bets
         );
     }
+
+
+    function updateLotPrice($lotId, $newPrice) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        // SQL query: get all categories
+        $sqlQuery = "UPDATE lots SET start_price = '". mysqli_real_escape_string($dbConnection, $newPrice) ."' WHERE id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "'";
+
+        // fetch result
+        return fetchDBData($sqlQuery);
+    }
+
+
+    function getLastBet($lotId) {
+        // get global variable with db connection
+        global $dbConnection;
+
+        // SQL query: get all categories
+        $sqlQuery = "SELECT user_id, price FROM rates WHERE lot_id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "' ORDER BY user_id DESC LIMIT 1";
+
+        // fetch result
+        $maxBets = fetchDBData($sqlQuery);
+
+        //get data for single lot
+        $bet = $maxBets[0];
+
+        return [
+            'authorId' => $bet['user_id'],
+            'maxPrice' => $bet['price']
+        ];
+    }
+
+
+
+
+

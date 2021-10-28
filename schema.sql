@@ -47,6 +47,7 @@ CREATE TABLE rates(
     PRIMARY KEY (`id`),
     `user_id` INT(11) NOT NULL,
     `lot_id` INT(11) NOT NULL,
+    `is_winner` TinyInt(1) DEFAULT 0,
     KEY `user_id` (`user_id`),
     KEY `lot_id` (`lot_id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
@@ -57,3 +58,6 @@ CREATE TABLE rates(
 CREATE FULLTEXT INDEX lot_ft_search ON lots(name, description);
 
 -- SELECT * FROM lots WHERE MATCH(name,description) AGAINST('Маска Oakley');
+
+-- add new column
+-- ALTER TABLE rates ADD COLUMN is_winner TinyInt(1) DEFAULT 0;

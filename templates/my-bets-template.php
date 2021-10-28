@@ -7,7 +7,7 @@
 
             <!-- Bets list -->
             <?php foreach ($bets as $bet): ?>
-            <tr class="rates__item">
+            <tr class="rates__item <?= $bet['isWinner'] === '1' ? 'rates__item--win' : ''?>">
                 <td class="rates__info">
                     <div class="rates__img">
                         <img src="uploads/<?= htmlspecialchars($bet['imageUrl']) ?>" width="54" height="40"
@@ -17,7 +17,8 @@
                         <h3 class="rates__title"><a
                                 href="lot.php?id=<?= htmlspecialchars($bet['lotId']) ?>"><?= htmlspecialchars($bet['name']) ?></a>
                         </h3>
-                        <!-- <p>Телефон +7 900 667-84-48, Скайп: Vlas92. Звонить с 14 до 20</p> -->
+                        <!-- show winner info -->
+                        <?= $bet['isWinner'] === '1' ? "<p>" . htmlspecialchars($bet['winnerContact']) . "</p>" : '' ?>
                     </div>
                 </td>
                 <td class="rates__category">
@@ -26,8 +27,7 @@
                 <td class="rates__timer">
                     <!-- get remaining time for the item -->
                     <?php $remainingTime = calculateRemainingTime($bet['expirationDate']) ?>
-                    <!-- timer--win -->
-                    <div class="timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?>">
+                    <div class="timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?> <?= $bet['isWinner'] === '1' ? 'timer--win' : ''?>">
                         <!-- show $remainingTime -->
                         <?= $remainingTime['hours'] . ' h : ' . $remainingTime['minutes'] . ' min' ?>
                     </div>
