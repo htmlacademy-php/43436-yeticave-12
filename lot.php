@@ -3,6 +3,7 @@
     require_once('helpers/helpers.php');
     require_once('helpers/formatters.php');
     require_once('helpers/fetchers.php');
+    require_once('helpers/formValidation.php');
     require_once('helpers/initSession.php');
 
     // setup default timezone
@@ -26,8 +27,56 @@
         exit();
     }
 
-    $bits = fetchBits($lotId); // src => helpers/fetchers.php
+    $lastPrice = is_null($lot['lastPrice']) ? (int)$lot['startPrice'] : (int)$lot['lastPrice'];
+    $betStep = (int)$lot['betStep'];
+    $currentMinBetPrice = $lastPrice + $betStep;
+
+    $bets = fetchBets($lotId); // src => helpers/fetchers.php
     $categories = fetchCategories(); // src => helpers/fetchers.php
+
+    $errors = [];
+    $requiredFields = ['betStep'];
+
+    $betMadeByCurrentUser = false;
+
+    $rules = [
+        'betStep' => function ($currentMinBetPrice) {
+            return validateBetValue($_POST['betStep'], $currentMinBetPrice);
+        },
+    ];
+
+    // check errors in all fields ($_POST)
+    foreach ($_POST as $key => $value) {
+        if (isset($rules[$key])) {
+            $rule = $rules[$key];
+            $errors[$key] = $rule($currentMinBetPrice);
+        }
+    }
+
+    // clean entries with value NULL
+    $errors = array_filter($errors);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($errors) === 0) {
+        $betValue = $_POST['betStep'];
+        // $currentPrice = is_null($lot['lastPrice']) ? $lot['startPrice'] : $lot['lastPrice'];
+        // $newPrice = $currentPrice + $betValue;
+
+        createNewBet($userId, $lotId, $betValue);
+
+        updateLotLastPrice($lotId, $betValue);
+
+        // TODO remove 43436-yeticave-12 directory
+        // redirect to a page with the lot information
+        header("Location:/43436-yeticave-12/lot.php?&id=$lotId");
+
+    }
+
+    if($isAuth === true) {
+        $lastBet = getLastBet($lotId);
+        $betMadeByCurrentUser = $lastBet !== [] ? (int)$lastBet['authorId'] === (int)$userId : '';
+    }
+
+    $currentUserId = $isAuth === true ? $userId : '';
 
 
     // PAGE STRUCTURE
@@ -40,9 +89,13 @@
     // call data for page content
     $pageContent = include_template('lot-template.php', [
         'lot' => $lot,
-        'bits' => $bits,
+        'bets' => $bets,
         'categoriesList' => $categoriesList,
         'isAuth' => $isAuth,
+        'errors' => $errors,
+        'userId' => $currentUserId,
+        'betMadeByCurrentUser' => $betMadeByCurrentUser,
+        'currentMinBetPrice' => $currentMinBetPrice
     ]);
 
     // call data for index.php

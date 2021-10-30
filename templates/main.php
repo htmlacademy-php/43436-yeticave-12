@@ -6,7 +6,7 @@
             <!-- Show lots categories -->
             <?php foreach ($categories as $category): ?>
                 <li class="promo__item promo__item--<?= htmlspecialchars($category['techName']) ?>">
-                    <a class="promo__link" href="pages/all-lots.html">
+                    <a class="promo__link" href="lots.php?category=<?= htmlspecialchars($category['techName']) ?>">
                         <?= htmlspecialchars($category['name']) ?>
                     </a>
                 </li>
@@ -19,7 +19,7 @@
         </div>
         <ul class="lots__list">
             <!-- Lots list -->
-            <?php foreach ($lots as $lot): ?>
+            <?php foreach ($lots as $lot) : ?>
             <li class="lots__item lot">
 
                 <div class="lot__image">

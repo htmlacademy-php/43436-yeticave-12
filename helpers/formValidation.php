@@ -187,7 +187,7 @@
      * @return string||null error message or null
      */
     function validateNotNegativeNumber($fieldName, $errorMessage) {
-        if (intval($fieldName) <= 0) {
+        if ((int)$fieldName <= 0) {
             return "$errorMessage";
         }
         // return null if the field doesn't have errors
@@ -217,6 +217,29 @@
         }
         // return null if the field doesn't have errors
         return null;
+    }
+
+    /**
+     * Validate bet value
+     *
+     * @param $fieldName: field name
+     * @param $minBitValue: value of min bet for the lots
+     *
+     * @return string||null error message or null
+     */
+    function validateBetValue($fieldName, $minBetValue) {
+        if (empty($fieldName)) {
+            return 'Enter the bet value';
+        }
+
+        if(is_numeric($fieldName) === false) {
+            return 'Only numerical values allowed';
+        }
+
+        if ($fieldName < $minBetValue) {
+            return 'Min. bet must be ' . formatPrice($minBetValue);
+        }
+
     }
 
 
