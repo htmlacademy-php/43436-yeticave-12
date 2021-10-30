@@ -187,7 +187,7 @@
      * @return string||null error message or null
      */
     function validateNotNegativeNumber($fieldName, $errorMessage) {
-        if (intval($fieldName) <= 0) {
+        if ((int)$fieldName <= 0) {
             return "$errorMessage";
         }
         // return null if the field doesn't have errors

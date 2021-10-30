@@ -26,6 +26,7 @@ CREATE TABLE lots(
     `description` TEXT NOT NULL,
     `image_url` VARCHAR(255) NOT NULL,
     `start_price` DECIMAL UNSIGNED DEFAULT 0 NOT NULL,
+    `last_price` DECIMAL UNSIGNED,
     `expiration_at` DATETIME NOT NULL,
     `rate_step` DECIMAL UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),

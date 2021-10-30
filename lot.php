@@ -27,6 +27,10 @@
         exit();
     }
 
+    $lastPrice = is_null($lot['lastPrice']) ? (int)$lot['startPrice'] : (int)$lot['lastPrice'];
+    $betStep = (int)$lot['betStep'];
+    $currentMinBetPrice = $lastPrice + $betStep;
+
     $bets = fetchBets($lotId); // src => helpers/fetchers.php
     $categories = fetchCategories(); // src => helpers/fetchers.php
 
@@ -36,8 +40,8 @@
     $betMadeByCurrentUser = false;
 
     $rules = [
-        'betStep' => function ($lot) {
-            return validateBetValue($_POST['betStep'], $lot['betStep']);
+        'betStep' => function ($currentMinBetPrice) {
+            return validateBetValue($_POST['betStep'], $currentMinBetPrice);
         },
     ];
 
@@ -45,7 +49,7 @@
     foreach ($_POST as $key => $value) {
         if (isset($rules[$key])) {
             $rule = $rules[$key];
-            $errors[$key] = $rule($lot);
+            $errors[$key] = $rule($currentMinBetPrice);
         }
     }
 
@@ -54,12 +58,12 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && count($errors) === 0) {
         $betValue = $_POST['betStep'];
-        $currentPrice = $lot['startPrice'];
-        $newPrice = $currentPrice + $betValue;
+        // $currentPrice = is_null($lot['lastPrice']) ? $lot['startPrice'] : $lot['lastPrice'];
+        // $newPrice = $currentPrice + $betValue;
 
-        createNewBet($userId, $lotId, $newPrice);
+        createNewBet($userId, $lotId, $betValue);
 
-        updateLotPrice($lotId, $newPrice);
+        updateLotLastPrice($lotId, $betValue);
 
         // TODO remove 43436-yeticave-12 directory
         // redirect to a page with the lot information
@@ -69,7 +73,7 @@
 
     if($isAuth === true) {
         $lastBet = getLastBet($lotId);
-        $betMadeByCurrentUser = count($lastBet) > 0 ? intval($lastBet['authorId']) === intval($userId) : '';
+        $betMadeByCurrentUser = $lastBet !== [] ? (int)$lastBet['authorId'] === (int)$userId : '';
     }
 
     $currentUserId = $isAuth === true ? $userId : '';
@@ -90,7 +94,8 @@
         'isAuth' => $isAuth,
         'errors' => $errors,
         'userId' => $currentUserId,
-        'betMadeByCurrentUser' => $betMadeByCurrentUser
+        'betMadeByCurrentUser' => $betMadeByCurrentUser,
+        'currentMinBetPrice' => $currentMinBetPrice
     ]);
 
     // call data for index.php

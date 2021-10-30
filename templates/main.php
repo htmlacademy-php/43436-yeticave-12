@@ -19,7 +19,7 @@
         </div>
         <ul class="lots__list">
             <!-- Lots list -->
-            <?php foreach ($lots as $lot): ?>
+            <?php foreach ($lots as $lot) : ?>
             <li class="lots__item lot">
 
                 <div class="lot__image">

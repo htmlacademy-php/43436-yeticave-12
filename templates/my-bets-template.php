@@ -29,7 +29,9 @@
                     <?php $remainingTime = calculateRemainingTime($bet['expirationDate']) ?>
                     <div class="timer <?= $remainingTime['hours'] < 1 ? 'timer--finishing' : ''?> <?= $bet['isWinner'] === '1' ? 'timer--win' : ''?>">
                         <!-- show $remainingTime -->
-                        <?= $remainingTime['hours'] . ' h : ' . $remainingTime['minutes'] . ' min' ?>
+                        <?= $bet['isWinner'] === '1'
+                        ? 'Ставка выиграла'
+                        : $remainingTime['hours'] . ' h : ' . $remainingTime['minutes'] . ' min'?>
                     </div>
                 </td>
                 <td class="rates__price">

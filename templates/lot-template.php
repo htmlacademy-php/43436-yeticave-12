@@ -44,14 +44,14 @@
                             <span class="lot-item__amount">Текущая цена</span>
 
                             <span class="lot-item__cost">
-                                <?= htmlspecialchars(formatPrice($lot['startPrice'])) ?>
+                                <?= htmlspecialchars(formatPrice(is_null($lot['lastPrice']) ? $lot['startPrice'] : $lot['lastPrice'])) ?>
                             </span>
 
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка
                             <span>
-                                <?= htmlspecialchars(formatPrice($lot['betStep'])) ?>
+                                <?= htmlspecialchars(formatPrice($currentMinBetPrice));?>
                             </span>
                         </div>
                     </div>
@@ -59,8 +59,8 @@
 
                     <?php if ($isAuth === true &&
                     ($remainingTime['hours'] > 1 && $remainingTime['minutes'] > 1) &&
-                    intval($lot['authorId']) !== intval($userId) &&
-                    !$betMadeByCurrentUser) : ?>
+                    (int)$lot['authorId'] !== (int)$userId) : ?>
+                    <!-- !$betMadeByCurrentUser) : ?> -->
 
 
                     <form class="lot-item__form" action="lot.php?id=<?= $_GET['id'] ?>" method="post"
@@ -68,7 +68,7 @@
                         <p class="lot-item__form-item form__item form__item--invalid">
                             <label for="cost">Ваша ставка</label>
                             <input id="cost" type="text" name="betStep"
-                                placeholder="<?= htmlspecialchars(formatPrice($lot['betStep'])) ?>">
+                                placeholder="<?= htmlspecialchars(formatPrice($currentMinBetPrice)) ?>">
                             <span class="form__error"><?=$errors['betStep'] ?? ""; ?></span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>

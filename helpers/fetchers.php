@@ -64,6 +64,7 @@
             l.description,
             l.rate_step,
             l.start_price,
+            l.last_price,
             l.image_url,
             c.name as category_name,
             l.expiration_at
@@ -95,6 +96,7 @@
             'description' => $lot['description'],
             'betStep' => $lot['rate_step'],
             'startPrice' => $lot['start_price'],
+            'lastPrice' => $lot['last_price'],
             'imageUrl' => $lot['image_url'],
             'category' => $lot['category_name'],
             'expirationDate' => $lot['expiration_at'],
@@ -443,12 +445,14 @@
     }
 
 
-    function updateLotPrice($lotId, $newPrice) {
+    function updateLotLastPrice($lotId, $newPrice) {
         // get global variable with db connection
         global $dbConnection;
 
         // SQL query: get all categories
-        $sqlQuery = "UPDATE lots SET start_price = '". mysqli_real_escape_string($dbConnection, $newPrice) ."', rate_step = '". mysqli_real_escape_string($dbConnection, $newPrice) ."' WHERE id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "'";
+        $sqlQuery = "UPDATE lots
+            SET last_price = '". mysqli_real_escape_string($dbConnection, $newPrice) ."'
+            WHERE id = '" . mysqli_real_escape_string($dbConnection, $lotId) . "'";
 
         executeQuery($sqlQuery);
     }
